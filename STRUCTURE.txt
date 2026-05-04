@@ -1,0 +1,18 @@
+# ══════════════════════════════════════════════════
+#  SALESCOACH PRO — ПОЛНАЯ СТРУКТУРА ПРОЕКТА
+# ══════════════════════════════════════════════════
+#
+#  salescoach/
+#  ├── package.json
+#  ├── vercel.json
+#  ├── .env.local              ← ваши ключи (НЕ в git)
+#  ├── .gitignore
+#  ├── public/
+#  │   └── index.html          ← весь фронтенд
+#  └── api/
+#      ├── chat.js             ← /api/chat  (Gemini чат)
+#      ├── analyze.js          ← /api/analyze (разбор звонка)
+#      ├── notify.js           ← /api/notify (Telegram)
+#      └── log.js              ← /api/log (Google Sheets)
+#
+# ══════════════════════════════════════════════════

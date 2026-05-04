@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SalesCoach — Недвижимость</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Mulish:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#f7f4ef; --bg2:#ede9e1; --surface:#fff; --surface2:#faf8f5;
+  --border:#ddd8ce; --border2:#ccc5b8;
+  --ink:#1a1714; --ink2:#3b3630; --ink3:#7a7268; --ink4:#b0a99e;
+  --gold:#b08d57; --gold2:#d4aa6e; --gold-bg:#fdf8f0; --gold-bdr:rgba(176,141,87,.25);
+  --green:#2d7a4f; --green-bg:#eef6f1; --green-bdr:rgba(45,122,79,.2);
+  --red:#c0392b; --red-bg:#fdf1ef; --red-bdr:rgba(192,57,43,.2);
+  --orange:#c97c2e; --blue:#2a5f8a; --blue-bg:#eef4fa;
+  --r:14px; --rsm:9px; --rxs:6px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Mulish',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;display:flex;flex-direction:column}
+
+/* ── ACCESS GATE ── */
+#accessGate{position:fixed;inset:0;background:var(--bg);z-index:999;display:flex;align-items:center;justify-content:center;padding:24px}
+.gate-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:48px 40px;max-width:420px;width:100%;text-align:center;box-shadow:0 8px 48px rgba(26,23,20,.08);animation:fadeUp .5s ease}
+.gate-logo{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:700;color:var(--ink);margin-bottom:8px}
+.gate-logo span{color:var(--gold)}
+.gate-sub{font-size:13px;color:var(--ink3);margin-bottom:28px;line-height:1.6}
+.gate-input{width:100%;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--rsm);padding:13px 16px;font-family:'Mulish',sans-serif;font-size:15px;color:var(--ink);outline:none;text-align:center;letter-spacing:2px;transition:border-color .2s;margin-bottom:12px}
+.gate-input:focus{border-color:var(--gold)}
+.gate-btn{width:100%;background:var(--ink);color:#fff;border:none;padding:14px;border-radius:var(--rsm);font-family:'Mulish',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:background .2s}
+.gate-btn:hover{background:var(--gold)}
+.gate-err{font-size:13px;color:var(--red);margin-top:10px;display:none}
+
+/* ── LOGIN GATE ── */
+#loginGate{position:fixed;inset:0;background:var(--bg);z-index:800;display:none;align-items:center;justify-content:center;padding:24px}
+.login-wrap{display:flex;max-width:780px;width:100%;background:var(--surface);border:1px solid var(--border);border-radius:20px;overflow:hidden;box-shadow:0 8px 48px rgba(26,23,20,.08);animation:fadeUp .5s ease}
+.login-left{flex:0 0 240px;background:var(--ink);padding:44px 32px;display:flex;flex-direction:column;gap:24px}
+.ll-logo{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;color:#fff}
+.ll-logo span{color:var(--gold2)}
+.ll-list{list-style:none}
+.ll-list li{font-size:12.5px;color:rgba(255,255,255,.5);padding:5px 0;display:flex;gap:8px;align-items:center}
+.ll-list li::before{content:'◆';color:var(--gold);font-size:8px}
+.login-right{flex:1;padding:44px 36px}
+.login-title{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;margin-bottom:6px}
+.login-sub{font-size:13px;color:var(--ink3);margin-bottom:28px;line-height:1.5}
+.lfield{margin-bottom:16px}
+.lfield label{display:block;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink3);font-weight:700;margin-bottom:7px}
+.lfield input{width:100%;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--rsm);padding:11px 14px;font-family:'Mulish',sans-serif;font-size:14px;color:var(--ink);outline:none;transition:border-color .2s}
+.lfield input:focus{border-color:var(--gold)}
+.lfield input::placeholder{color:var(--ink4)}
+.lfield .hint{font-size:11.5px;color:var(--ink4);margin-top:5px;line-height:1.5}
+.lfield .hint a{color:var(--gold);text-decoration:none}
+.login-btn{width:100%;background:var(--ink);color:#fff;border:none;padding:13px;border-radius:var(--rsm);font-family:'Mulish',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:background .2s;margin-top:6px}
+.login-btn:hover{background:var(--gold)}
+
+/* ── MAIN ── */
+.app{max-width:960px;margin:0 auto;width:100%;padding:0 24px;flex:1;display:flex;flex-direction:column}
+header{padding:26px 0 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1.5px solid var(--ink);margin-bottom:26px;gap:14px}
+.logo-main{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:24px;letter-spacing:-.5px}
+.logo-main span{color:var(--gold)}
+.logo-eyebrow{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);font-weight:700;margin-bottom:2px}
+.header-right{display:flex;align-items:center;gap:10px}
+.user-pill{display:flex;align-items:center;gap:8px;background:var(--surface);border:1.5px solid var(--border);border-radius:30px;padding:4px 13px 4px 4px}
+.user-av{width:28px;height:28px;border-radius:50%;background:var(--ink);color:var(--gold2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0}
+.user-name{font-size:13px;font-weight:600;color:var(--ink2);max-width:130px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.logout-btn{background:none;border:none;color:var(--ink4);font-size:12px;cursor:pointer;padding:3px;transition:color .2s}
+.logout-btn:hover{color:var(--red)}
+.nav-tabs{display:flex;border:1.5px solid var(--ink);border-radius:8px;overflow:hidden}
+.nav-tab{padding:8px 16px;font-family:'Mulish',sans-serif;font-size:13px;font-weight:600;cursor:pointer;background:transparent;border:none;color:var(--ink3);border-right:1.5px solid var(--ink);transition:all .2s;white-space:nowrap}
+.nav-tab:last-child{border-right:none}
+.nav-tab.active{background:var(--ink);color:#fff}
+.nav-tab:hover:not(.active){background:var(--bg2);color:var(--ink)}
+.panel{display:none;flex-direction:column;gap:22px;flex:1;padding-bottom:48px}
+.panel.active{display:flex}
+.slabel{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);font-weight:700;display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.slabel::after{content:'';flex:1;height:1px;background:var(--border)}
+.card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);padding:24px}
+
+/* product banner */
+.pb{background:var(--ink);border-radius:var(--r);padding:20px 26px;display:flex;align-items:flex-start;gap:16px;overflow:hidden;position:relative}
+.pb::before{content:'';position:absolute;right:-40px;top:-40px;width:160px;height:160px;border-radius:50%;background:rgba(176,141,87,.1)}
+.pb-icon{font-size:34px;flex-shrink:0;position:relative;z-index:1}
+.pb-body{position:relative;z-index:1}
+.pb-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:3px}
+.pb-name{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:700;color:#fff;margin-bottom:4px}
+.pb-desc{font-size:13px;color:rgba(255,255,255,.5);line-height:1.55;max-width:540px}
+.pb-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.pb-tag{background:rgba(176,141,87,.2);border:1px solid rgba(176,141,87,.3);color:var(--gold2);padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600}
+
+/* input tabs */
+.itabs{display:flex;margin-bottom:16px;border-bottom:1.5px solid var(--border)}
+.itab{padding:8px 16px;font-size:13px;font-weight:600;color:var(--ink3);cursor:pointer;background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-1.5px;transition:all .2s;font-family:'Mulish',sans-serif}
+.itab.active{color:var(--gold);border-bottom-color:var(--gold)}
+.tc{display:none}.tc.active{display:block}
+.tinput{width:100%;min-height:180px;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--rsm);padding:15px;font-family:'Cormorant Garamond',serif;font-size:15px;line-height:1.8;color:var(--ink2);resize:vertical;outline:none;transition:border-color .2s}
+.tinput:focus{border-color:var(--gold)}
+.tinput::placeholder{color:var(--ink4);font-style:italic}
+.sinput{width:100%;min-height:100px;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--rsm);padding:15px;font-family:'Mulish',sans-serif;font-size:14px;line-height:1.7;color:var(--ink2);resize:vertical;outline:none;transition:border-color .2s}
+.sinput:focus{border-color:var(--gold)}
+.sinput::placeholder{color:var(--ink4)}
+.abtn{margin-top:16px;background:var(--ink);color:#fff;border:none;padding:12px 26px;border-radius:var(--rsm);font-family:'Mulish',sans-serif;font-size:13px;font-weight:700;letter-spacing:.4px;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:8px}
+.abtn:hover{background:var(--gold)}.abtn:disabled{background:var(--ink4);cursor:not-allowed}
+
+/* analysis result */
+.ares{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);overflow:hidden;animation:slideIn .4s ease}
+.ares-hdr{background:var(--ink);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.ares-title{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:16px;color:#fff}
+.ares-badge{padding:4px 14px;border-radius:20px;font-size:13px;font-weight:800;font-family:'Mulish',sans-serif}
+.ares-badge.high{background:var(--green);color:#fff}.ares-badge.mid{background:var(--orange);color:#fff}.ares-badge.low{background:var(--red);color:#fff}
+.phases{padding:22px;display:flex;flex-direction:column;gap:20px}
+.phase{border-left:2.5px solid var(--border2);padding-left:18px;position:relative}
+.phase.ok{border-left-color:var(--green)}.phase.warn{border-left-color:var(--orange)}.phase.bad{border-left-color:var(--red)}
+.phase-dot{width:8px;height:8px;border-radius:50%;position:absolute;left:-5px;top:5px;background:var(--border2)}
+.phase.ok .phase-dot{background:var(--green)}.phase.warn .phase-dot{background:var(--orange)}.phase.bad .phase-dot{background:var(--red)}
+.phase-name{font-size:10px;letter-spacing:1.8px;text-transform:uppercase;color:var(--ink3);margin-bottom:5px;font-weight:700}
+.phase-said{font-family:'Cormorant Garamond',serif;font-size:14.5px;font-style:italic;color:var(--ink2);background:var(--surface2);border:1px solid var(--border);border-radius:var(--rxs);padding:9px 13px;margin:7px 0;line-height:1.6}
+.phase-said::before{content:'«'}.phase-said::after{content:'»'}
+.phase-comment{font-size:14px;color:var(--ink2);line-height:1.65;margin-bottom:8px}
+.alt-label{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--green);font-weight:700;margin-bottom:6px}
+.alt-item{background:var(--green-bg);border:1px solid var(--green-bdr);border-radius:var(--rxs);padding:9px 13px;font-size:14px;color:var(--ink2);line-height:1.65;margin-bottom:5px;font-family:'Cormorant Garamond',serif;font-style:italic}
+.alt-item::before{content:'✦ ';color:var(--green);font-style:normal;font-family:'Mulish',sans-serif}
+.scores-blk{margin:0 22px 22px;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--rsm);padding:18px}
+.scores-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px}
+.score-lbl{font-size:10px;letter-spacing:.8px;text-transform:uppercase;color:var(--ink3);margin-bottom:6px;font-weight:700}
+.score-bar{background:var(--border);border-radius:3px;height:4px;overflow:hidden;margin-bottom:5px}
+.score-fill{height:100%;border-radius:3px;transition:width 1.2s ease}
+.score-val{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:21px;color:var(--ink)}
+.summary-blk{font-size:14px;color:var(--ink2);line-height:1.75;border-top:1px solid var(--border);padding-top:14px}
+.summary-blk p{margin-bottom:8px}.summary-blk p:last-child{margin-bottom:0}
+.notify-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.badge-tg{display:inline-flex;align-items:center;gap:5px;background:var(--blue-bg);border:1px solid rgba(42,95,138,.2);color:var(--blue);padding:4px 11px;border-radius:20px;font-size:12px;font-weight:600}
+.badge-gs{display:inline-flex;align-items:center;gap:5px;background:var(--green-bg);border:1px solid var(--green-bdr);color:var(--green);padding:4px 11px;border-radius:20px;font-size:12px;font-weight:600}
+
+/* scenarios */
+.sc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:11px}
+.sc-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--rsm);padding:17px 15px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+.sc-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform .3s}
+.sc-card:hover{border-color:var(--ink);transform:translateY(-2px)}.sc-card:hover::after{transform:scaleX(1)}
+.sc-card.sel{border-color:var(--gold);background:var(--gold-bg)}.sc-card.sel::after{transform:scaleX(1)}
+.sc-icon{font-size:21px;margin-bottom:9px}
+.sc-name{font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px}
+.sc-desc{font-size:12px;color:var(--ink3);line-height:1.4}
+.diff-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.diff-lbl{font-size:13px;color:var(--ink3);font-weight:600}
+.diff-btn{padding:7px 15px;border-radius:var(--rxs);border:1.5px solid var(--border);background:transparent;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'Mulish',sans-serif;color:var(--ink3)}
+.diff-btn:hover{border-color:var(--ink);color:var(--ink)}
+.diff-btn.active{border-color:var(--ink);background:var(--ink);color:#fff}
+.start-btn{background:var(--gold);color:#fff;border:none;padding:13px 32px;border-radius:var(--rsm);font-family:'Mulish',sans-serif;font-size:14px;font-weight:800;letter-spacing:.4px;cursor:pointer;transition:all .2s;align-self:flex-start;display:flex;align-items:center;gap:8px}
+.start-btn:hover{background:#9a7a49;transform:translateY(-1px);box-shadow:0 6px 24px rgba(176,141,87,.3)}
+.start-btn:disabled{background:var(--ink4);cursor:not-allowed;transform:none;box-shadow:none}
+
+/* chat */
+.chat-panel{display:none;flex-direction:column;flex:1;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);overflow:hidden;min-height:520px}
+.chat-panel.active{display:flex}
+.chat-topbar{background:var(--ink);padding:13px 20px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.chat-scenario{font-size:10.5px;letter-spacing:.4px;color:rgba(255,255,255,.4);margin-bottom:2px}
+.chat-title-bar{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:15px;color:#fff}
+.chat-topright{display:flex;align-items:center;gap:9px}
+.turn-chip{font-size:11px;color:rgba(255,255,255,.4);background:rgba(255,255,255,.08);padding:4px 10px;border-radius:20px}
+.end-btn{background:rgba(192,57,43,.2);color:#ff8f85;border:1px solid rgba(192,57,43,.35);padding:6px 13px;border-radius:var(--rxs);font-size:12px;font-weight:700;cursor:pointer;font-family:'Mulish',sans-serif;transition:all .2s}
+.end-btn:hover{background:rgba(192,57,43,.35)}
+.chat-msgs{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:13px;background:var(--surface2);max-height:400px}
+.chat-msgs::-webkit-scrollbar{width:3px}.chat-msgs::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.chat-msg{display:flex;gap:9px;animation:msgIn .3s ease forwards;opacity:0}
+.chat-msg.agent{flex-direction:row-reverse}
+.chat-av{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;margin-top:2px}
+.chat-av.client{background:var(--blue-bg);border:1px solid rgba(42,95,138,.15)}
+.chat-av.agent{background:var(--gold-bg);border:1px solid var(--gold-bdr)}
+.chat-bubble{max-width:72%;padding:10px 14px;border-radius:10px;font-size:14px;line-height:1.65;color:var(--ink2)}
+.chat-msg.client .chat-bubble{background:var(--surface);border:1px solid var(--border);border-top-left-radius:3px}
+.chat-msg.agent  .chat-bubble{background:var(--gold-bg);border:1px solid var(--gold-bdr);border-top-right-radius:3px}
+.typing-ind{display:flex;gap:9px;align-items:center}
+.typing-wrap{background:var(--surface);border:1px solid var(--border);border-radius:10px;border-top-left-radius:3px;padding:11px 14px;display:flex;gap:4px}
+.td{width:5px;height:5px;border-radius:50%;background:var(--ink3);animation:td 1.2s infinite}
+.td:nth-child(2){animation-delay:.2s}.td:nth-child(3){animation-delay:.4s}
+.chat-input-row{padding:13px 14px;display:flex;gap:9px;border-top:1px solid var(--border);background:var(--surface)}
+.chat-field{flex:1;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--rsm);padding:9px 13px;font-family:'Mulish',sans-serif;font-size:14px;color:var(--ink);outline:none;resize:none;max-height:100px;transition:border-color .2s}
+.chat-field:focus{border-color:var(--gold)}
+.chat-field::placeholder{color:var(--ink4)}
+.send-btn{width:40px;height:40px;background:var(--ink);border:none;border-radius:var(--rsm);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+.send-btn:hover{background:var(--gold)}.send-btn svg{width:17px;height:17px;fill:#fff}
+
+/* debrief */
+.deb{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);overflow:hidden;animation:slideIn .5s ease}
+.deb-hdr{background:var(--ink);padding:18px 24px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.deb-title{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:17px;color:#fff}
+.deb-meta{font-size:13px;color:rgba(255,255,255,.4)}
+.deb-body{padding:24px}
+.skill-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:11px;margin-bottom:20px}
+.sk-cell{background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--rsm);padding:13px 10px;text-align:center}
+.sk-lbl{font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--ink3);margin-bottom:7px;font-weight:700}
+.sk-val{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:26px;color:var(--ink)}
+.sk-val.green{color:var(--green)}.sk-val.orange{color:var(--orange)}.sk-val.red{color:var(--red)}.sk-val.gold{color:var(--gold)}
+.moments{display:flex;flex-direction:column;gap:11px;margin-bottom:20px}
+.moment{border-left:2.5px solid var(--border2);padding:11px 15px;border-radius:0 var(--rsm) var(--rsm) 0;background:var(--surface2)}
+.moment.good{border-left-color:var(--green);background:var(--green-bg)}
+.moment.bad{border-left-color:var(--red);background:var(--red-bg)}
+.moment.tip{border-left-color:var(--gold);background:var(--gold-bg)}
+.moment-tag{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;font-weight:700;margin-bottom:5px}
+.moment.good .moment-tag{color:var(--green)}.moment.bad .moment-tag{color:var(--red)}.moment.tip .moment-tag{color:var(--gold)}
+.moment-text{font-size:14px;color:var(--ink2);line-height:1.65}
+.moment-alt{margin-top:8px;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:var(--green);padding:8px 12px;background:var(--surface);border-radius:var(--rxs);border:1px solid var(--green-bdr)}
+.moment-alt::before{content:'Лучше было сказать: ';font-style:normal;color:var(--ink3);font-family:'Mulish',sans-serif;font-size:10px;letter-spacing:.5px;text-transform:uppercase;display:block;margin-bottom:3px}
+.verdict-box{background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--rsm);padding:16px;margin-bottom:20px}
+.verdict-box p{font-size:14px;color:var(--ink2);line-height:1.7;margin-bottom:7px}.verdict-box p:last-child{margin-bottom:0}
+.deb-actions{display:flex;gap:9px;flex-wrap:wrap}
+.btn-retry{background:transparent;border:1.5px solid var(--border2);color:var(--ink2);padding:10px 20px;border-radius:var(--rsm);font-family:'Mulish',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s}
+.btn-retry:hover{border-color:var(--ink);color:var(--ink)}
+.btn-new{background:var(--ink);color:#fff;border:none;padding:10px 20px;border-radius:var(--rsm);font-family:'Mulish',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:background .2s}
+.btn-new:hover{background:var(--gold)}
+
+/* utils */
+.spinner{width:15px;height:15px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite;flex-shrink:0}
+.spinner.dark{border-color:var(--border);border-top-color:var(--gold)}
+.loading-row{display:flex;align-items:center;gap:11px;font-size:14px;color:var(--ink3);padding:18px}
+.toast{position:fixed;bottom:22px;right:22px;background:var(--ink);border-radius:var(--rsm);padding:12px 17px;display:flex;align-items:center;gap:9px;font-size:13px;color:rgba(255,255,255,.75);z-index:8000;animation:toastIn .3s ease;max-width:280px;box-shadow:0 8px 32px rgba(0,0,0,.18)}
+.err-box{color:var(--red);padding:16px;background:var(--red-bg);border-radius:var(--r);border:1px solid var(--red-bdr)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes td{0%,80%,100%{transform:translateY(0);opacity:.3}40%{transform:translateY(-4px);opacity:1}}
+@keyframes toastIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+@media(max-width:680px){
+  .sc-grid{grid-template-columns:1fr 1fr}
+  .scores-grid{grid-template-columns:1fr 1fr}
+  .skill-grid{grid-template-columns:1fr 1fr}
+  header{flex-direction:column;align-items:flex-start}
+  .login-left{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════ КОНФИГ ПРОДУКТА ════════════ -->
+<script>
+// ⚠️ ТОЛЬКО данные о продукте — никаких ключей!
+const PRODUCT = {
+  companyName:  "Ваше Агентство",
+  productName:  "ЖК «Парк Авеню»",
+  productEmoji: "🏢",
+  productDesc:  "Жилой комплекс бизнес-класса в центре. Квартиры 28–180 м², подземный паркинг, консьерж, сдача 2026.",
+  productTags:  ["Бизнес-класс","Новостройка","Центр","Ипотека 5.9%","Рассрочка"],
+  productFacts: `
+Объект: ЖК «Парк Авеню», бизнес-класс
+Адрес: ул. Ленина 12, центр города, 10 мин до делового квартала
+Застройщик: ГК «СтройИнвест», 18 лет на рынке, 42 сданных объекта
+Сдача: Q3 2026 (корпус 1 уже сдан)
+Планировки: студии от 28 м², 1к от 45 м², 2к от 68 м², 3к от 95 м², пентхаусы от 180 м²
+Цены: студии от 4.2 млн ₽, 1к от 6.8 млн, 2к от 10.5 млн, 3к от 15.2 млн
+Ипотека: 12 банков, ставка от 8.2% (семейная от 5.9%), первый взнос от 10%
+Рассрочка: беспроцентная до сдачи дома
+Инфраструктура: паркинг, консьерж, фитнес, детская площадка, дизайн-лобби
+Отделка: чистовая, whitebox, ремонт под ключ +890 тыс ₽
+Конкуренты: ЖК «Гринвуд» (дешевле 15%, но эконом), ЖК «Сити Плаза» (дороже, сдача 2027)
+Преимущества: центр, надёжный застройщик, ипотека 5.9%, развитая инфраструктура
+  `,
+  scenarios: [
+    {id:"cold",       icon:"📞", name:"Входящий звонок",      desc:"Клиент звонит по рекламе, нужно записать на показ"},
+    {id:"showing",    icon:"🏠", name:"После показа",          desc:"Клиент посмотрел квартиру, нужно закрыть на бронь"},
+    {id:"objections", icon:"🛡️", name:"Работа с возражениями", desc:'"Дорого", "ещё подожду", "боюсь застройщика"'},
+    {id:"investor",   icon:"📈", name:"Клиент-инвестор",       desc:"Хочет купить для аренды или перепродажи, нужны цифры"},
+    {id:"mortgage",   icon:"🏦", name:"Ипотека и рассрочка",   desc:"Боится переплаты, спрашивает условия банков"},
+    {id:"return",     icon:"🔄", name:"Возврат клиента",        desc:"Смотрел 2 месяца назад, ушёл думать — вернуть"},
+  ]
+};
+</script>
+
+<!-- ACCESS GATE -->
+<div id="accessGate">
+  <div class="gate-card">
+    <div class="gate-logo">Sales<span>Coach</span></div>
+    <div class="gate-sub">Введите код доступа, который вам прислали</div>
+    <input class="gate-input" id="tokenInput" type="text" placeholder="КОД ДОСТУПА"
+      onkeydown="if(event.key==='Enter')checkToken()">
+    <button class="gate-btn" onclick="checkToken()">Войти</button>
+    <div class="gate-err" id="gateErr">Неверный код. Запросите у администратора.</div>
+  </div>
+</div>
+
+<!-- LOGIN GATE -->
+<div id="loginGate" style="display:none">
+  <div class="login-wrap">
+    <div class="login-left">
+      <div>
+        <div class="ll-logo">Sales<span>Coach</span></div>
+      </div>
+      <ul class="ll-list">
+        <li>Тренировки с AI-клиентом</li>
+        <li>Разбор реальных звонков</li>
+        <li>Оценка по 5 навыкам</li>
+        <li>Фидбек в Telegram</li>
+        <li>Дашборд в Google Sheets</li>
+      </ul>
+    </div>
+    <div class="login-right">
+      <div class="login-title">Ваши данные</div>
+      <div class="login-sub">Нужны для персонального фидбека и отчётности</div>
+      <div class="lfield">
+        <label>Имя и фамилия</label>
+        <input type="text" id="inName" placeholder="Иван Петров">
+      </div>
+      <div class="lfield">
+        <label>Должность</label>
+        <input type="text" id="inRole" placeholder="Менеджер по продажам">
+      </div>
+      <div class="lfield">
+        <label>Telegram Chat ID</label>
+        <input type="text" id="inTgId" placeholder="123456789">
+        <div class="hint">Напишите <a href="https://t.me/userinfobot" target="_blank">@userinfobot</a> — пришлёт ID. Оставьте пустым если не нужно.</div>
+      </div>
+      <button class="login-btn" onclick="doLogin()">▶ &ensp;Начать тренировки</button>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div class="app" id="mainApp" style="display:none">
+  <header>
+    <div>
+      <div class="logo-eyebrow" id="hCompany">Тренажёр продаж</div>
+      <div class="logo-main">Sales<span>Coach</span></div>
+    </div>
+    <div class="header-right">
+      <div class="user-pill">
+        <div class="user-av" id="uAv">ИП</div>
+        <div class="user-name" id="uName">Пользователь</div>
+        <button class="logout-btn" title="Сменить пользователя" onclick="doLogout()">✕</button>
+      </div>
+      <div class="nav-tabs">
+        <button class="nav-tab active" onclick="goPanel('analyze')">📋 Разбор</button>
+        <button class="nav-tab" onclick="goPanel('train')">🎭 Тренировка</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ANALYZE -->
+  <div class="panel active" id="panel-analyze">
+    <div class="pb">
+      <div class="pb-icon" id="pIcon">🏢</div>
+      <div class="pb-body">
+        <div class="pb-label">Объект продажи</div>
+        <div class="pb-name" id="pName">—</div>
+        <div class="pb-desc" id="pDesc">—</div>
+        <div class="pb-tags" id="pTags"></div>
+      </div>
+    </div>
+    <div>
+      <div class="slabel">Загрузить звонок</div>
+      <div class="card">
+        <div class="itabs">
+          <button class="itab active" onclick="switchITab('full')">Полный транскрипт</button>
+          <button class="itab" onclick="switchITab('summary')">Краткий пересказ</button>
+        </div>
+        <div class="tc active" id="tc-full">
+          <textarea class="tinput" id="tfull" placeholder="Менеджер: Добрый день! По объявлению о квартире...&#10;Клиент: Да, звоню насчёт 2-комнатной..."></textarea>
+        </div>
+        <div class="tc" id="tc-summary">
+          <textarea class="sinput" id="tsummary" placeholder="Опишите кратко: как начался звонок, что спрашивал клиент, какие возражения, чем закончилось..."></textarea>
+        </div>
+        <button class="abtn" id="analyzeBtn" onclick="runAnalysis()">🔍 Разобрать звонок</button>
+      </div>
+    </div>
+    <div id="analysisOut"></div>
+  </div>
+
+  <!-- TRAIN -->
+  <div class="panel" id="panel-train">
+    <div id="trainSetup">
+      <div class="pb">
+        <div class="pb-icon">🏢</div>
+        <div class="pb-body">
+          <div class="pb-label">Вы продаёте</div>
+          <div class="pb-name" id="tName">—</div>
+          <div class="pb-desc" style="color:rgba(255,255,255,.45);font-size:13px">Тренируйтесь вести переговоры с AI-клиентом</div>
+        </div>
+      </div>
+      <div>
+        <div class="slabel">Выберите сценарий</div>
+        <div class="sc-grid" id="scenarioGrid"></div>
+      </div>
+      <div>
+        <div class="slabel">Сложность клиента</div>
+        <div class="diff-row">
+          <span class="diff-lbl">Клиент:</span>
+          <button class="diff-btn active" onclick="setDiff(this,'easy')">😊 Лёгкий</button>
+          <button class="diff-btn" onclick="setDiff(this,'medium')">😐 Сложный</button>
+          <button class="diff-btn" onclick="setDiff(this,'hard')">😤 Жёсткий</button>
+        </div>
+      </div>
+      <button class="start-btn" id="startBtn" onclick="startTraining()" disabled>▶ &ensp;Начать тренировку</button>
+    </div>
+
+    <div class="chat-panel" id="chatPanel">
+      <div class="chat-topbar">
+        <div>
+          <div class="chat-scenario" id="chatMeta">Сценарий</div>
+          <div class="chat-title-bar">🎙️ Симуляция переговоров</div>
+        </div>
+        <div class="chat-topright">
+          <div class="turn-chip" id="turnChip">Реплика 0</div>
+          <button class="end-btn" onclick="endCall()">📴 Завершить</button>
+        </div>
+      </div>
+      <div class="chat-msgs" id="chatMsgs"></div>
+      <div class="chat-input-row">
+        <textarea class="chat-field" id="chatInput" rows="1" placeholder="Ваш ответ клиенту..."
+          onkeydown="onChatKey(event)" oninput="growField(this)"></textarea>
+        <button class="send-btn" onclick="sendMsg()">
+          <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div id="debriefOut"></div>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════════════ */
+let user = {name:'',role:'',tgId:'',initials:''};
+let selScenario = null, selDiff = 'easy';
+let chatHistory = [], turns = 0;
+let iTabMode = 'full';
+
+/* ═══════════════════════════════════════════════════
+   ACCESS TOKEN CHECK
+   Токен хранится в env на сервере. Мы проверяем его
+   через /api/check — браузер никогда не видит значение.
+═══════════════════════════════════════════════════ */
+async function checkToken() {
+  const token = document.getElementById('tokenInput').value.trim();
+  if (!token) return;
+
+  try {
+    const r = await fetch('/api/check', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({token})
+    });
+    const d = await r.json();
+    if (d.ok) {
+      sessionStorage.setItem('sc_access', '1');
+      document.getElementById('accessGate').style.display = 'none';
+      showLoginOrApp();
+    } else {
+      document.getElementById('gateErr').style.display = 'block';
+    }
+  } catch(e) {
+    document.getElementById('gateErr').textContent = 'Ошибка соединения. Попробуйте снова.';
+    document.getElementById('gateErr').style.display = 'block';
+  }
+}
+
+function showLoginOrApp() {
+  const saved = localStorage.getItem('sc_user');
+  if (saved) {
+    try { user = JSON.parse(saved); showApp(); return; } catch(e){}
+  }
+  document.getElementById('loginGate').style.display = 'flex';
+}
+
+// При загрузке
+window.addEventListener('DOMContentLoaded', () => {
+  if (sessionStorage.getItem('sc_access') === '1') {
+    document.getElementById('accessGate').style.display = 'none';
+    showLoginOrApp();
+  }
+});
+
+/* ═══════════════════════════════════════════════════
+   LOGIN
+═══════════════════════════════════════════════════ */
+function doLogin() {
+  const name = document.getElementById('inName').value.trim();
+  if (!name) { alert('Введите ваше имя'); return; }
+  const role = document.getElementById('inRole').value.trim();
+  const tgId = document.getElementById('inTgId').value.trim();
+  const parts = name.split(' ');
+  const initials = parts.length >= 2
+    ? (parts[0][0]+parts[1][0]).toUpperCase()
+    : name.slice(0,2).toUpperCase();
+  user = {name, role, tgId, initials};
+  localStorage.setItem('sc_user', JSON.stringify(user));
+  document.getElementById('loginGate').style.display = 'none';
+  showApp();
+}
+
+function doLogout() {
+  localStorage.removeItem('sc_user');
+  location.reload();
+}
+
+function showApp() {
+  document.getElementById('mainApp').style.display = 'flex';
+  document.getElementById('mainApp').style.flexDirection = 'column';
+  document.getElementById('hCompany').textContent = PRODUCT.companyName + ' — Тренажёр продаж';
+  document.getElementById('uAv').textContent = user.initials;
+  document.getElementById('uName').textContent = user.name;
+  // banners
+  document.getElementById('pIcon').textContent = PRODUCT.productEmoji;
+  document.getElementById('pName').textContent = PRODUCT.productName;
+  document.getElementById('pDesc').textContent = PRODUCT.productDesc;
+  document.getElementById('tName').textContent = PRODUCT.productName;
+  document.getElementById('pTags').innerHTML =
+    PRODUCT.productTags.map(t=>`<span class="pb-tag">${t}</span>`).join('');
+  // scenarios
+  document.getElementById('scenarioGrid').innerHTML =
+    PRODUCT.scenarios.map(s=>`
+      <div class="sc-card" onclick="pickScenario(this,'${s.id}')">
+        <div class="sc-icon">${s.icon}</div>
+        <div class="sc-name">${s.name}</div>
+        <div class="sc-desc">${s.desc}</div>
+      </div>`).join('');
+}
+
+/* ═══════════════════════════════════════════════════
+   NAV
+═══════════════════════════════════════════════════ */
+function goPanel(tab) {
+  document.querySelectorAll('.nav-tab').forEach((t,i)=>
+    t.classList.toggle('active',(i===0&&tab==='analyze')||(i===1&&tab==='train')));
+  document.getElementById('panel-analyze').classList.toggle('active',tab==='analyze');
+  document.getElementById('panel-train').classList.toggle('active',tab==='train');
+}
+function switchITab(m) {
+  iTabMode = m;
+  document.querySelectorAll('.itab').forEach((t,i)=>
+    t.classList.toggle('active',(i===0&&m==='full')||(i===1&&m==='summary')));
+  document.getElementById('tc-full').classList.toggle('active',m==='full');
+  document.getElementById('tc-summary').classList.toggle('active',m==='summary');
+}
+
+/* ═══════════════════════════════════════════════════
+   API HELPERS — все запросы идут на /api/*
+═══════════════════════════════════════════════════ */
+async function apiPost(path, body) {
+  const r = await fetch(path, {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify(body)
+  });
+  const d = await r.json();
+  if (d.error) throw new Error(d.error);
+  return d;
+}
+
+const sleep = ms => new Promise(r=>setTimeout(r,ms));
+
+/* ═══════════════════════════════════════════════════
+   TOAST
+═══════════════════════════════════════════════════ */
+function toast(icon,text,ms=4000) {
+  const el=document.createElement('div');
+  el.className='toast';
+  el.innerHTML=`<span>${icon}</span><span>${text}</span>`;
+  document.body.appendChild(el);
+  setTimeout(()=>{el.style.opacity='0';el.style.transition='opacity .3s';setTimeout(()=>el.remove(),300)},ms);
+}
+
+/* ═══════════════════════════════════════════════════
+   TELEGRAM helper
+═══════════════════════════════════════════════════ */
+async function tgSend(text) {
+  if (!user.tgId) return;
+  try { await apiPost('/api/notify', {chatId:user.tgId, text}); } catch(e){console.warn('TG:',e.message);}
+}
+async function sheetsLog(payload) {
+  try { await apiPost('/api/log', payload); } catch(e){console.warn('Sheets:',e.message);}
+}
+
+/* ═══════════════════════════════════════════════════
+   ANALYZE
+═══════════════════════════════════════════════════ */
+async function runAnalysis() {
+  const txt = iTabMode==='full'
+    ? document.getElementById('tfull').value.trim()
+    : document.getElementById('tsummary').value.trim();
+  if (!txt){alert('Введите текст звонка');return;}
+
+  const btn=document.getElementById('analyzeBtn');
+  btn.disabled=true;
+  btn.innerHTML='<div class="spinner"></div> Анализирую...';
+  document.getElementById('analysisOut').innerHTML='';
+
+  try {
+    const r = await apiPost('/api/analyze',{text:txt,mode:iTabMode,productFacts:PRODUCT.productFacts});
+    renderAnalysis(r);
+
+    // Telegram
+    const sc=r.overall_score;
+    await tgSend(`${sc>=7?'🟢':sc>=4?'🟡':'🔴'} <b>Разбор звонка — ${user.name}</b>\n🏢 ${PRODUCT.productName}\n📊 Оценка: ${sc}/10 · ${r.outcome}\n\n💪 ${r.key_strength}\n\n⚠️ ${r.key_mistake}\n\n📝 ${r.summary}`);
+    if(user.tgId) toast('📱','Разбор отправлен в Telegram');
+
+    // Sheets
+    await sheetsLog({type:'analysis',ts:new Date().toISOString(),name:user.name,role:user.role,
+      product:PRODUCT.productName,score:r.overall_score,outcome:r.outcome,
+      keyMistake:r.key_mistake,keyStrength:r.key_strength,summary:r.summary,
+      rapport:r.scores.rapport,needs:r.scores.needs_discovery,
+      objections:r.scores.objection_handling,closing:r.scores.closing,
+      transcript:txt.slice(0,3000)});
+    toast('📊','Сохранено в Google Sheets');
+
+  } catch(e) {
+    document.getElementById('analysisOut').innerHTML=`<div class="err-box">⚠️ Ошибка: ${e.message}</div>`;
+  }
+  btn.disabled=false;
+  btn.innerHTML='🔍 Разобрать звонок';
+}
+
+function renderAnalysis(r) {
+  const barClrs=['#b08d57','#2d7a4f','#c97c2e','#c0392b'];
+  const sc=r.overall_score;
+  const badge=sc>=7?'high':sc>=4?'mid':'low';
+  const phases=r.phases.map(p=>`
+    <div class="phase ${p.status}">
+      <div class="phase-dot"></div>
+      <div class="phase-name">${p.name}</div>
+      ${p.what_was_said?`<div class="phase-said">${p.what_was_said}</div>`:''}
+      <div class="phase-comment">${p.comment}</div>
+      ${p.alternatives?.length?`<div class="alt-label">✦ Альтернативные фразы</div>${p.alternatives.map(a=>`<div class="alt-item">${a}</div>`).join('')}`:''}
+    </div>`).join('');
+  const scores=Object.keys(r.scores).map((k,i)=>`
+    <div>
+      <div class="score-lbl">${r.score_labels?.[i]||k}</div>
+      <div class="score-bar"><div class="score-fill" style="width:${r.scores[k]*10}%;background:${barClrs[i]}"></div></div>
+      <div class="score-val">${r.scores[k]}/10</div>
+    </div>`).join('');
+  document.getElementById('analysisOut').innerHTML=`
+    <div class="ares">
+      <div class="ares-hdr">
+        <div class="ares-title">📊 Разбор звонка · ${r.outcome}</div>
+        <div class="ares-badge ${badge}">${r.overall_score}/10</div>
+      </div>
+      <div class="phases">${phases}</div>
+      <div class="scores-blk">
+        <div class="scores-grid">${scores}</div>
+        <div class="summary-blk">
+          ${r.key_strength?`<p>💪 <strong>Сильная сторона:</strong> ${r.key_strength}</p>`:''}
+          ${r.key_mistake?`<p>⚠️ <strong>Главная ошибка:</strong> ${r.key_mistake}</p>`:''}
+          <p>📝 ${r.summary}</p>
+          <div class="notify-row">
+            ${user.tgId?'<span class="badge-tg">📱 Отправлено в Telegram</span>':''}
+            <span class="badge-gs">📊 Сохранено в Sheets</span>
+          </div>
+        </div>
+      </div>
+    </div>`;
+}
+
+/* ═══════════════════════════════════════════════════
+   TRAINING
+═══════════════════════════════════════════════════ */
+function pickScenario(el,id){
+  document.querySelectorAll('.sc-card').forEach(c=>c.classList.remove('sel'));
+  el.classList.add('sel'); selScenario=id;
+  document.getElementById('startBtn').disabled=false;
+}
+function setDiff(el,d){
+  document.querySelectorAll('.diff-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active'); selDiff=d;
+}
+const scenName=()=>PRODUCT.scenarios.find(s=>s.id===selScenario)?.name||selScenario;
+const diffName=()=>({easy:'Лёгкий клиент',medium:'Сложный',hard:'Жёсткий клиент'}[selDiff]);
+
+function getSystemPrompt() {
+  const roles={
+    cold:       'Ты — покупатель, которому нужна квартира. Увидел рекламу и позвонил. Немного занят.',
+    showing:    'Ты — покупатель, который час назад посмотрел квартиру. Понравилось, но не торопишься.',
+    objections: 'Ты — покупатель с возражениями: "дорого", "боюсь застройщика", "сначала продам свою квартиру".',
+    investor:   'Ты — инвестор. Тебя интересует только доходность, окупаемость и рост цены. Требуешь цифры.',
+    mortgage:   'Ты — покупатель, который хочет квартиру, но боится ипотеки и переплаты.',
+    return:     'Ты — покупатель, который 2 месяца назад смотрел квартиры но ушёл думать. Рассматриваешь другие варианты.'
+  };
+  const diffs={
+    easy:   'Ты лоялен, достаточно 2 хороших аргументов.',
+    medium: 'Ты требователен, задаёшь каверзные вопросы. Нужно 3 конкретных аргумента.',
+    hard:   'Ты очень скептичен, резок, сравниваешь с конкурентами. Нужно 4-5 сильных аргументов.'
+  };
+  return `${roles[selScenario]||roles.cold}\n${diffs[selDiff]}\n\nПродукт:\n${PRODUCT.productFacts}\n\nПравила:\n- Отвечай коротко, 1-4 предложения\n- Задавай конкретные вопросы о цене, метраже, застройщике, ипотеке\n- После 5-8 реплик прими решение\n- В финале добавь: [РЕЗУЛЬТАТ: успех] или [РЕЗУЛЬТАТ: неудача]\n- Отвечай только на русском. Ты реальный человек.`;
+}
+
+async function startTraining(){
+  if(!selScenario)return;
+  chatHistory=[]; turns=0;
+  document.getElementById('trainSetup').style.display='none';
+  document.getElementById('debriefOut').innerHTML='';
+  document.getElementById('chatMsgs').innerHTML='';
+  document.getElementById('chatPanel').classList.add('active');
+  document.getElementById('chatMeta').textContent=`${scenName()} · ${diffName()} · ${PRODUCT.productName}`;
+  updateTurn();
+  showTyping();
+  await sleep(1000);
+  try {
+    const {text}=await apiPost('/api/chat',{
+      messages:[{role:'user',content:'Начни диалог — первая реплика клиента (1-2 предложения).'}],
+      systemPrompt:getSystemPrompt(), maxTokens:200
+    });
+    chatHistory=[
+      {role:'user',content:'Начни диалог.'},
+      {role:'assistant',content:text}
+    ];
+    hideTyping();
+    addMsg('client',text.replace(/\[РЕЗУЛЬТАТ:.*?\]/g,'').trim());
+    document.getElementById('chatInput').focus();
+  } catch(e){hideTyping();addMsg('client','Ошибка: '+e.message);}
+}
+
+async function sendMsg(){
+  const inp=document.getElementById('chatInput');
+  const txt=inp.value.trim();
+  if(!txt)return;
+  inp.value=''; inp.style.height='auto';
+  addMsg('agent',txt);
+  chatHistory.push({role:'user',content:txt});
+  turns++; updateTurn();
+  showTyping();
+  try {
+    const {text}=await apiPost('/api/chat',{
+      messages:chatHistory, systemPrompt:getSystemPrompt(), maxTokens:300
+    });
+    chatHistory.push({role:'assistant',content:text});
+    hideTyping();
+    const isEnd=text.includes('[РЕЗУЛЬТАТ:');
+    addMsg('client',text.replace(/\[РЕЗУЛЬТАТ:.*?\]/g,'').trim());
+    if(isEnd||turns>=10){await sleep(600);runDebrief(text.includes('успех'));}
+  } catch(e){hideTyping();addMsg('client','Ошибка: '+e.message);}
+}
+
+function endCall(){hideTyping();runDebrief(false);}
+
+async function runDebrief(success){
+  document.getElementById('chatPanel').classList.remove('active');
+  const out=document.getElementById('debriefOut');
+  out.innerHTML='<div class="loading-row"><div class="spinner dark"></div> Анализирую переговоры...</div>';
+  const transcript=chatHistory
+    .filter(m=>!m.content.startsWith('Начни'))
+    .map(m=>`${m.role==='user'?'Менеджер':'Клиент'}: ${m.content.replace(/\[РЕЗУЛЬТАТ:.*?\]/g,'').trim()}`)
+    .join('\n');
+  try {
+    const r=await apiPost('/api/debrief',{
+      transcript, scenario:scenName(), difficulty:diffName(),
+      success, productFacts:PRODUCT.productFacts
+    });
+    renderDebrief(r,success,transcript);
+    // Telegram
+    const sc=r.total;
+    const bads=(r.moments||[]).filter(m=>m.type==='bad').map(m=>`• ${m.text}`).join('\n');
+    const goods=(r.moments||[]).filter(m=>m.type==='good').map(m=>`• ${m.text}`).join('\n');
+    await tgSend(`🎭 <b>Тренировка — ${user.name}</b>\n📋 ${scenName()} · ${diffName()}\n${sc>=7?'🟢':sc>=4?'🟡':'🔴'} Балл: ${sc}/10 · ${success?'✅ Закрыто':'❌ Не закрыто'}\n\n✅ Хорошо:\n${goods||'—'}\n\n❌ Ошибки:\n${bads||'—'}\n\n🎯 ${r.next_focus||''}`);
+    if(user.tgId)toast('📱','Разбор отправлен в Telegram');
+    await sheetsLog({type:'training',ts:new Date().toISOString(),name:user.name,role:user.role,
+      product:PRODUCT.productName,scenario:scenName(),difficulty:diffName(),success,total:r.total,
+      rapport:r.scores.rapport,needs:r.scores.needs_discovery,
+      argumentation:r.scores.argumentation,objections:r.scores.objections,closing:r.scores.closing,
+      verdict:r.verdict,nextFocus:r.next_focus,transcript:transcript.slice(0,4000)});
+    toast('📊','Сохранено в Google Sheets');
+  } catch(e){out.innerHTML=`<div class="err-box">⚠️ Ошибка: ${e.message}</div>`;}
+}
+
+function renderDebrief(r,success){
+  const out=document.getElementById('debriefOut');
+  const labels=['Контакт','Потребности','Аргументация','Возражения','Закрытие'];
+  const keys=Object.keys(r.scores);
+  const clr=v=>v>=7?'green':v>=4?'orange':'red';
+  const cells=keys.map((k,i)=>`<div class="sk-cell"><div class="sk-lbl">${labels[i]||k}</div><div class="sk-val ${clr(r.scores[k])}">${r.scores[k]}</div></div>`).join('');
+  const moments=(r.moments||[]).map(m=>`
+    <div class="moment ${m.type}">
+      <div class="moment-tag">${m.type==='good'?'✓ Хорошо':m.type==='bad'?'✗ Ошибка':'💡 Совет'}</div>
+      <div class="moment-text">${m.text}</div>
+      ${m.alternative?`<div class="moment-alt">${m.alternative}</div>`:''}
+    </div>`).join('');
+  out.innerHTML=`
+    <div class="deb">
+      <div class="deb-hdr">
+        <div class="deb-title">📋 Разбор тренировки · ${scenName()}</div>
+        <div class="deb-meta">${success?'✅ Закрыто':'❌ Не закрыто'} · ${r.total}/10</div>
+      </div>
+      <div class="deb-body">
+        <div class="slabel">Оценки по навыкам</div>
+        <div class="skill-grid">
+          ${cells}
+          <div class="sk-cell" style="border-color:var(--gold);background:var(--gold-bg)">
+            <div class="sk-lbl">Итог</div><div class="sk-val gold">${r.total}</div>
+          </div>
+        </div>
+        <div class="slabel">Разбор по моментам</div>
+        <div class="moments">${moments}</div>
+        <div class="verdict-box">
+          <p><strong>Вывод:</strong> ${r.verdict}</p>
+          ${r.next_focus?`<p style="color:var(--ink3)">🎯 <strong>Следующий фокус:</strong> ${r.next_focus}</p>`:''}
+          <div class="notify-row">
+            ${user.tgId?'<span class="badge-tg">📱 Отправлено в Telegram</span>':''}
+            <span class="badge-gs">📊 Сохранено в Sheets</span>
+          </div>
+        </div>
+        <div class="deb-actions">
+          <button class="btn-retry" onclick="retryScenario()">🔁 Повторить сценарий</button>
+          <button class="btn-new" onclick="newScenario()">▶ Новый сценарий</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function retryScenario(){document.getElementById('debriefOut').innerHTML='';document.getElementById('trainSetup').style.display='';startTraining();}
+function newScenario(){document.getElementById('debriefOut').innerHTML='';document.getElementById('trainSetup').style.display='';document.querySelectorAll('.sc-card').forEach(c=>c.classList.remove('sel'));selScenario=null;document.getElementById('startBtn').disabled=true;document.getElementById('chatPanel').classList.remove('active');}
+
+/* chat ui */
+function addMsg(role,text){
+  const el=document.createElement('div');
+  el.className=`chat-msg ${role}`;
+  el.innerHTML=`<div class="chat-av ${role}">${role==='client'?'👤':'🎙️'}</div><div class="chat-bubble">${text.replace(/\n/g,'<br>')}</div>`;
+  const msgs=document.getElementById('chatMsgs');
+  msgs.appendChild(el); msgs.scrollTop=msgs.scrollHeight;
+}
+function showTyping(){
+  if(document.getElementById('typingInd'))return;
+  const el=document.createElement('div');
+  el.className='typing-ind';el.id='typingInd';
+  el.innerHTML='<div class="chat-av client">👤</div><div class="typing-wrap"><div class="td"></div><div class="td"></div><div class="td"></div></div>';
+  const msgs=document.getElementById('chatMsgs');
+  msgs.appendChild(el);msgs.scrollTop=msgs.scrollHeight;
+}
+function hideTyping(){document.getElementById('typingInd')?.remove();}
+function updateTurn(){document.getElementById('turnChip').textContent=`Реплика ${turns}`;}
+function onChatKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();}}
+function growField(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,100)+'px';}
+</script>
+</body>
+</html>
