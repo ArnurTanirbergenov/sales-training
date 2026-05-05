@@ -1,12 +1,12 @@
 
 
-export async function openai({ system, messages, maxTokens = 500, temperature = 0.85 }) {
+export async function openai({ system, messages, max_completion_tokens = 500, temperature = 0.85 }) {
   const key = process.env.OPENAI_API_KEY;
   if (!key) throw new Error('OPENAI_API_KEY not configured in environment variables');
 
   const body = {
     model: 'gpt-5.4-mini',
-    max_tokens: maxTokens,
+    max_completion_tokens: max_completion_tokens,
     temperature,
     messages: [
       { role: 'system', content: system },
