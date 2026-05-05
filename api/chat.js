@@ -1,48 +1,96 @@
+// api/chat.js — GPT-4.1 mini client simulator
+// POST /api/chat
+// Body: { messages, scenarioId, difficulty, productFacts }
+
+import { openai } from './_openai.js';
+
+const CLIENT_PERSONAS = {
+  cold: `Ты — Михаил, 38 лет, IT-руководитель. Жена, двое детей (8 и 11 лет), живёт в тесной 2-комнатной.
+Увидел рекламу и позвонил из любопытства. Принимает решения медленно, нужны факты.
+Скрытая боль: дети растут, нужна комната каждому, жена давно просит переехать.
+Внутренний барьер: "Не уверен что сейчас подходящее время."`,
+
+  showing: `Ты — Анна, 34 года, маркетолог, незамужем, снимает квартиру. Только что посмотрела объект.
+Внешне понравилось, но внутри сомневается.
+Скрытая боль: устала платить аренду в никуда, хочет стабильность.
+Внутренний барьер: "А вдруг найду что-то лучше?"`,
+
+  objections: `Ты — Дмитрий, 45 лет, предприниматель. Опытный покупатель, знает рынок. Скептик.
+Хочет переехать ближе к центру.
+Главные возражения: дорого, застройщика не знаю, у других дешевле, дайте скидку.`,
+
+  investor: `Ты — Артём, 41 год, финдиректор. Владеет 2 квартирами, ищет 3-й объект как инвестицию.
+Мышление ROI: говоришь цифрами. Требуешь доходность аренды, рост цены за 3 года, сравнение с депозитом.
+Если покажут конкретную выгоду — решение принимает быстро.`,
+
+  mortgage: `Ты — Светлана, 29 лет, учитель. Зарплата 65 тыс/мес, накопила 800 тыс. Впервые покупает.
+Тревожный тип, боится долга на 20 лет.
+Главный страх: а вдруг не потяну, потеряю работу, огромная переплата.`,
+
+  return: `Ты — Игорь, 37 лет, инженер. 2 месяца назад смотрел квартиры, ушёл думать. Посмотрел ещё 4 ЖК — запутался.
+Рациональный тип с синдромом отложенного решения. Жена давит, сам не может выбрать.`
+};
+
+const DIFF_MODS = {
+  easy:   { label: 'Лёгкий',  min: 4, max: 6,  desc: 'Ты открыт, легко идёшь на контакт. Возражения мягкие, снимаются 1-2 аргументами.' },
+  medium: { label: 'Средний', min: 5, max: 8,  desc: 'Ты требователен, сравниваешь с конкурентами, нужно 3 конкретных аргумента.' },
+  hard:   { label: 'Жёсткий', min: 6, max: 10, desc: 'Ты скептичен, давишь: "У других дешевле". Нужно 4-5 сильных аргументов с фактами.' }
+};
+
+function buildSystem(scenarioId, difficulty, productFacts) {
+  const persona = CLIENT_PERSONAS[scenarioId] || CLIENT_PERSONAS.cold;
+  const diff = DIFF_MODS[difficulty] || DIFF_MODS.medium;
+
+  return `Ты — реалистичный покупатель недвижимости в учебной ролевой игре для обучения менеджеров.
+
+ТВОЯ ЛИЧНОСТЬ:
+${persona}
+
+УРОВЕНЬ СЛОЖНОСТИ: ${diff.label}
+${diff.desc}
+
+ОБЪЕКТ ПРОДАЖИ:
+${productFacts}
+
+КАК ТЫ СЕБЯ ВЕДЁШЬ:
+- Решение принимаешь эмоционально, обосновываешь логически
+- "Дорого" — не отказ, ты ищешь причину сказать "да"
+- Чувствуешь шаблонные фразы — на них отстраняешься
+- Оживаешь когда менеджер спрашивает о твоей ситуации и слушает ответ
+- Доверие растёт когда менеджер даёт конкретные факты, не давит
+
+СОГЛАСИШЬСЯ на следующий шаг (показ/бронь/встреча) когда выполнено 3 из 4:
+- Менеджер нашёл и озвучил твою главную боль
+- Дал конкретные цифры (не общие слова)
+- Обработал 2+ возражения с аргументами
+- Установил человеческий контакт
+
+ПРАВИЛА:
+- Отвечай коротко как в реальном звонке — максимум 3 предложения
+- Задавай конкретные вопросы: цена за м², ставка ипотеки, кто застройщик, что рядом
+- Не соглашайся раньше чем через ${diff.min}-${diff.max} реплик менеджера
+- В САМОЙ ПОСЛЕДНЕЙ реплике добавь в конце: [РЕЗУЛЬТАТ: успех] или [РЕЗУЛЬТАТ: неудача]
+- Только русский язык. Ты реальный человек, не выходи из роли.`;
+}
+
 export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const { messages, systemPrompt, maxTokens = 2048 } = req.body;
+  const { messages, scenarioId, difficulty, productFacts } = req.body;
 
-  if (!messages || !systemPrompt) {
-    return res.status(400).json({ error: 'messages and systemPrompt required' });
+  // Validate required fields
+  if (!messages || !Array.isArray(messages)) {
+    return res.status(400).json({ error: 'messages array is required' });
+  }
+  if (!scenarioId) {
+    return res.status(400).json({ error: 'scenarioId is required' });
   }
 
-  // Не забудьте добавить этот ключ в ваш файл .env
-  const ANTHROPIC_KEY = process.env.ANTHROPIC_API_KEY;
-  if (!ANTHROPIC_KEY) return res.status(500).json({ error: 'Anthropic key not configured' });
-
   try {
-    const anthropicRes = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': ANTHROPIC_KEY,
-        'anthropic-version': '2023-06-01'
-      },
-      body: JSON.stringify({
-        model: 'claude-3-5-haiku-latest', 
-        max_tokens: maxTokens,
-        system: systemPrompt, 
-        temperature: 0.7,
-        messages: messages.map(m => ({
-          role: m.role === 'assistant' || m.role === 'model' ? 'assistant' : 'user',
-          content: m.content
-        }))
-      })
-    });
-
-    const data = await anthropicRes.json();
-
-    // Обработка ошибок от API Anthropic
-    if (data.type === 'error') {
-      return res.status(500).json({ error: data.error.message });
-    }
-
-    // Парсинг успешного ответа
-    const text = data.content?.[0]?.text || '';
+    const system = buildSystem(scenarioId, difficulty || 'medium', productFacts || '');
+    const text = await openai({ system, messages, maxTokens: 400, temperature: 0.9 });
     return res.status(200).json({ text });
-
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }
