@@ -668,22 +668,7 @@ function setDiff(el,d){
 const scenName=()=>PRODUCT.scenarios.find(s=>s.id===selScenario)?.name||selScenario;
 const diffName=()=>({easy:'Лёгкий клиент',medium:'Сложный',hard:'Жёсткий клиент'}[selDiff]);
 
-function getSystemPrompt() {
-  const roles={
-    cold:       'Ты — покупатель, которому нужна квартира. Увидел рекламу и позвонил. Немного занят.',
-    showing:    'Ты — покупатель, который час назад посмотрел квартиру. Понравилось, но не торопишься.',
-    objections: 'Ты — покупатель с возражениями: "дорого", "боюсь застройщика", "сначала продам свою квартиру".',
-    investor:   'Ты — инвестор. Тебя интересует только доходность, окупаемость и рост цены. Требуешь цифры.',
-    mortgage:   'Ты — покупатель, который хочет квартиру, но боится ипотеки и переплаты.',
-    return:     'Ты — покупатель, который 2 месяца назад смотрел квартиры но ушёл думать. Рассматриваешь другие варианты.'
-  };
-  const diffs={
-    easy:   'Ты лоялен, достаточно 2 хороших аргументов.',
-    medium: 'Ты требователен, задаёшь каверзные вопросы. Нужно 3 конкретных аргумента.',
-    hard:   'Ты очень скептичен, резок, сравниваешь с конкурентами. Нужно 4-5 сильных аргументов.'
-  };
-  return `${roles[selScenario]||roles.cold}\n${diffs[selDiff]}\n\nПродукт:\n${PRODUCT.productFacts}\n\nПравила:\n- Отвечай коротко, 1-4 предложения\n- Задавай конкретные вопросы о цене, метраже, застройщике, ипотеке\n- После 5-8 реплик прими решение\n- В финале добавь: [РЕЗУЛЬТАТ: успех] или [РЕЗУЛЬТАТ: неудача]\n- Отвечай только на русском. Ты реальный человек.`;
-}
+// Системный промпт теперь строится на сервере в api/chat.js (GPT-4.1 mini)
 
 async function startTraining(){
   if(!selScenario)return;
@@ -698,8 +683,9 @@ async function startTraining(){
   await sleep(1000);
   try {
     const {text}=await apiPost('/api/chat',{
-      messages:[{role:'user',content:'Начни диалог — первая реплика клиента (1-2 предложения).'}],
-      systemPrompt:getSystemPrompt(), maxTokens:200
+      messages:[{role:'user',content:'Начни диалог — первая реплика клиента (1-2 предложения, естественно и коротко).'}],
+      scenarioId:selScenario, difficulty:selDiff,
+      productFacts:PRODUCT.productFacts, maxTokens:200
     });
     chatHistory=[
       {role:'user',content:'Начни диалог.'},
@@ -722,7 +708,8 @@ async function sendMsg(){
   showTyping();
   try {
     const {text}=await apiPost('/api/chat',{
-      messages:chatHistory, systemPrompt:getSystemPrompt(), maxTokens:300
+      messages:chatHistory, scenarioId:selScenario, difficulty:selDiff,
+      productFacts:PRODUCT.productFacts, maxTokens:300
     });
     chatHistory.push({role:'assistant',content:text});
     hideTyping();
@@ -789,6 +776,39 @@ function renderDebrief(r,success){
             <div class="sk-lbl">Итог</div><div class="sk-val gold">${r.total}</div>
           </div>
         </div>
+        <!-- SPIN breakdown -->
+        ${r.spin_used ? `
+        <div class="slabel">SPIN-анализ вопросов</div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px">
+          ${[
+            ['S — Ситуация', r.spin_used.situation],
+            ['P — Проблема', r.spin_used.problem],
+            ['I — Последствия', r.spin_used.implication],
+            ['N — Выгода', r.spin_used.need_payoff]
+          ].map(([label,used])=>`
+            <div style="background:${used?'var(--green-bg)':'var(--red-bg)'};border:1px solid ${used?'var(--green-bdr)':'var(--red-bdr)'};border-radius:var(--rsm);padding:12px 10px;text-align:center">
+              <div style="font-size:10px;letter-spacing:.8px;text-transform:uppercase;color:${used?'var(--green)':'var(--red)'};font-weight:700;margin-bottom:5px">${label}</div>
+              <div style="font-size:20px">${used?'✓':'✗'}</div>
+            </div>`).join('')}
+        </div>` : ''}
+
+        <!-- best / worst phrase -->
+        ${(r.best_phrase||r.worst_phrase) ? `
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px">
+          ${r.best_phrase?`<div style="background:var(--green-bg);border:1px solid var(--green-bdr);border-radius:var(--rsm);padding:14px">
+            <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--green);font-weight:700;margin-bottom:6px">💬 Лучшая фраза</div>
+            <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:var(--ink2);line-height:1.5">«${r.best_phrase}»</div>
+          </div>`:''}
+          ${r.worst_phrase?`<div style="background:var(--red-bg);border:1px solid var(--red-bdr);border-radius:var(--rsm);padding:14px">
+            <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--red);font-weight:700;margin-bottom:6px">⚠️ Слабый момент</div>
+            <div style="font-size:14px;color:var(--ink2);line-height:1.5">${r.worst_phrase}</div>
+          </div>`:''}
+        </div>` : ''}
+
+        ${r.talk_ratio?`<div style="font-size:13px;color:var(--ink3);background:var(--surface2);border:1px solid var(--border);border-radius:var(--rsm);padding:10px 14px;margin-bottom:20px">
+          🎙️ <strong>Соотношение речи:</strong> ${r.talk_ratio} &nbsp;·&nbsp; <span style="color:var(--green)">Идеал: менеджер говорит 40%, клиент — 60%</span>
+        </div>`:''}
+
         <div class="slabel">Разбор по моментам</div>
         <div class="moments">${moments}</div>
         <div class="verdict-box">
