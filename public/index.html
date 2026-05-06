@@ -657,7 +657,7 @@ async function runAnalysis() {
     await tgSend(
       `${sc>=7?'🟢':sc>=4?'🟡':'🔴'} <b>Разбор звонка — ${user.name}</b>\n` +
       `🥩 ${PRODUCT.productName}\n` +
-      `📊 Оценка: ${sc}/10 · ${r.outcome}\n\n` +
+      `📊 Оценка: ${sc}/50 · ${r.outcome}\n\n` +
       `💪 ${r.key_strength || '—'}\n\n` +
       `⚠️ ${r.key_mistake || '—'}\n\n` +
       `📝 ${r.summary || '—'}`
@@ -722,7 +722,7 @@ function renderAnalysis(r) {
     <div class="ares">
       <div class="ares-hdr">
         <div class="ares-title">📊 Разбор звонка · ${r.outcome||'неизвестно'}</div>
-        <div class="ares-badge ${badge}">${sc}/10</div>
+        <div class="ares-badge ${badge}">${sc}/50</div>
       </div>
       <div class="phases">${phases}</div>
       <div class="scores-blk">
@@ -870,7 +870,7 @@ async function runDebrief(success) {
     await tgSend(
       `🎭 <b>Тренировка — ${user.name}</b>\n` +
       `📋 ${scenName()} · ${diffName()}\n` +
-      `${sc>=7?'🟢':sc>=4?'🟡':'🔴'} Балл: ${sc}/10 · ${success?'✅ Закрыто':'❌ Не закрыто'}\n\n` +
+      `${sc>=7?'🟢':sc>=4?'🟡':'🔴'} Балл: ${sc}/50 · ${success?'✅ Закрыто':'❌ Не закрыто'}\n\n` +
       `✅ Хорошо:\n${goods||'—'}\n\n` +
       `❌ Ошибки:\n${bads||'—'}\n\n` +
       `🎯 ${r.next_focus||''}`
