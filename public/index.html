@@ -594,12 +594,27 @@ async function runAnalysis() {
     if(user.tgId) toast('📱','Разбор отправлен в Telegram');
 
     // Sheets
-    await sheetsLog({type:'analysis',ts:new Date().toISOString(),name:user.name,role:user.role,
-      product:PRODUCT.productName,score:r.overall_score,outcome:r.outcome,
-      keyMistake:r.key_mistake,keyStrength:r.key_strength,summary:r.summary,
-      rapport:r.scores.rapport,needs:r.scores.needs_discovery,
-      objections:r.scores.objection_handling,closing:r.scores.closing,
-      transcript:txt.slice(0,3000)});
+    await sheetsLog({
+      type: 'training',
+      ts: new Date().toISOString(),
+      name: user.name,
+      role: user.role,
+      product: PRODUCT.productName,
+      scenario: scenName(),
+      difficulty: diffName(),
+      success,
+      total: r.total,
+      rapport: r.scores.rapport,
+      needs: r.scores.needs_discovery,
+      argumentation: r.scores.argumentation,
+      objections: r.scores.objections,
+      closing: r.scores.closing,
+      verdict: r.verdict,
+      nextFocus: r.next_focus,
+      keyMistake: (r.moments || []).filter(m => m.type === 'bad').map(m => m.text).join(' | ') || '',
+      keyStrength: (r.moments || []).filter(m => m.type === 'good').map(m => m.text).join(' | ') || '',
+      transcript: transcript.slice(0, 4000)
+    });
     toast('📊','Сохранено в Google Sheets');
 
   } catch(e) {
