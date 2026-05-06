@@ -961,7 +961,7 @@ function renderDebrief(r, success) {
     <div class="deb">
       <div class="deb-hdr">
         <div class="deb-title">📋 Разбор тренировки · ${scenName()}</div>
-        <div class="deb-meta">${success?'✅ Закрыто':'❌ Не закрыто'} · ${r.total||0}/10</div>
+        <div class="deb-meta">${success?'✅ Закрыто':'❌ Не закрыто'} · ${r.total||0}/50</div>
       </div>
       <div class="deb-body">
         <div class="slabel">Оценки по навыкам</div>
@@ -969,7 +969,7 @@ function renderDebrief(r, success) {
           ${cells}
           <div class="sk-cell" style="border-color:var(--gold);background:var(--gold-bg)">
             <div class="sk-lbl">Итог</div>
-            <div class="sk-val gold">${r.total||0}</div>
+            <div class="sk-val gold">${r.total||0}<span style="font-size:14px;opacity:.5">/50</span></div>
           </div>
         </div>
         ${spinHTML}
