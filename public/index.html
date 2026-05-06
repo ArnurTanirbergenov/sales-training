@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SalesCoach — Недвижимость</title>
+<title>SalesCoach — Qazaq Grill</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Mulish:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -20,51 +20,64 @@
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Mulish',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;display:flex;flex-direction:column}
 
+/* ── TEXTURE OVERLAY ── */
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  opacity:.4}
+
 /* ── ACCESS GATE ── */
 #accessGate{position:fixed;inset:0;background:var(--bg);z-index:999;display:flex;align-items:center;justify-content:center;padding:24px}
-.gate-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:48px 40px;max-width:420px;width:100%;text-align:center;box-shadow:0 8px 48px rgba(26,23,20,.08);animation:fadeUp .5s ease}
-.gate-logo{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:700;color:var(--ink);margin-bottom:8px}
+.gate-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:52px 44px;max-width:420px;width:100%;text-align:center;box-shadow:0 8px 48px rgba(26,23,20,.08);animation:fadeUp .5s ease;position:relative;overflow:hidden}
+.gate-card::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(176,141,87,.12),transparent 70%);pointer-events:none}
+.gate-emblem{font-size:40px;margin-bottom:16px;display:block}
+.gate-logo{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:700;color:var(--ink);margin-bottom:6px}
 .gate-logo span{color:var(--gold)}
-.gate-sub{font-size:13px;color:var(--ink3);margin-bottom:28px;line-height:1.6}
-.gate-input{width:100%;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--rsm);padding:13px 16px;font-family:'Mulish',sans-serif;font-size:15px;color:var(--ink);outline:none;text-align:center;letter-spacing:2px;transition:border-color .2s;margin-bottom:12px}
-.gate-input:focus{border-color:var(--gold)}
-.gate-btn{width:100%;background:var(--ink);color:#fff;border:none;padding:14px;border-radius:var(--rsm);font-family:'Mulish',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:background .2s}
-.gate-btn:hover{background:var(--gold)}
-.gate-err{font-size:13px;color:var(--red);margin-top:10px;display:none}
+.gate-sub{font-size:13px;color:var(--ink3);margin-bottom:32px;line-height:1.6}
+.gate-input{width:100%;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--rsm);padding:14px 16px;font-family:'Mulish',sans-serif;font-size:15px;color:var(--ink);outline:none;text-align:center;letter-spacing:3px;transition:border-color .2s,box-shadow .2s;margin-bottom:12px}
+.gate-input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(176,141,87,.12)}
+.gate-btn{width:100%;background:var(--ink);color:#fff;border:none;padding:14px;border-radius:var(--rsm);font-family:'Mulish',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;letter-spacing:.5px}
+.gate-btn:hover{background:var(--gold);transform:translateY(-1px);box-shadow:0 6px 20px rgba(176,141,87,.3)}
+.gate-err{font-size:13px;color:var(--red);margin-top:10px;display:none;padding:8px 12px;background:var(--red-bg);border-radius:var(--rxs);border:1px solid var(--red-bdr)}
 
 /* ── LOGIN GATE ── */
 #loginGate{position:fixed;inset:0;background:var(--bg);z-index:800;display:none;align-items:center;justify-content:center;padding:24px}
 .login-wrap{display:flex;max-width:780px;width:100%;background:var(--surface);border:1px solid var(--border);border-radius:20px;overflow:hidden;box-shadow:0 8px 48px rgba(26,23,20,.08);animation:fadeUp .5s ease}
-.login-left{flex:0 0 240px;background:var(--ink);padding:44px 32px;display:flex;flex-direction:column;gap:24px}
-.ll-logo{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;color:#fff}
+.login-left{flex:0 0 240px;background:var(--ink);padding:44px 32px;display:flex;flex-direction:column;gap:24px;position:relative;overflow:hidden}
+.login-left::before{content:'';position:absolute;bottom:-40px;left:-40px;width:180px;height:180px;border-radius:50%;background:rgba(176,141,87,.08)}
+.ll-emblem{font-size:36px;position:relative;z-index:1}
+.ll-logo{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;color:#fff;position:relative;z-index:1}
 .ll-logo span{color:var(--gold2)}
-.ll-list{list-style:none}
-.ll-list li{font-size:12.5px;color:rgba(255,255,255,.5);padding:5px 0;display:flex;gap:8px;align-items:center}
-.ll-list li::before{content:'◆';color:var(--gold);font-size:8px}
+.ll-list{list-style:none;position:relative;z-index:1}
+.ll-list li{font-size:12.5px;color:rgba(255,255,255,.5);padding:6px 0;display:flex;gap:8px;align-items:center;border-bottom:1px solid rgba(255,255,255,.06)}
+.ll-list li:last-child{border-bottom:none}
+.ll-list li::before{content:'◆';color:var(--gold);font-size:8px;flex-shrink:0}
 .login-right{flex:1;padding:44px 36px}
 .login-title{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;margin-bottom:6px}
 .login-sub{font-size:13px;color:var(--ink3);margin-bottom:28px;line-height:1.5}
 .lfield{margin-bottom:16px}
 .lfield label{display:block;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink3);font-weight:700;margin-bottom:7px}
-.lfield input{width:100%;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--rsm);padding:11px 14px;font-family:'Mulish',sans-serif;font-size:14px;color:var(--ink);outline:none;transition:border-color .2s}
-.lfield input:focus{border-color:var(--gold)}
+.lfield input{width:100%;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--rsm);padding:11px 14px;font-family:'Mulish',sans-serif;font-size:14px;color:var(--ink);outline:none;transition:border-color .2s,box-shadow .2s}
+.lfield input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(176,141,87,.1)}
 .lfield input::placeholder{color:var(--ink4)}
 .lfield .hint{font-size:11.5px;color:var(--ink4);margin-top:5px;line-height:1.5}
 .lfield .hint a{color:var(--gold);text-decoration:none}
-.login-btn{width:100%;background:var(--ink);color:#fff;border:none;padding:13px;border-radius:var(--rsm);font-family:'Mulish',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:background .2s;margin-top:6px}
-.login-btn:hover{background:var(--gold)}
+.login-btn{width:100%;background:var(--ink);color:#fff;border:none;padding:13px;border-radius:var(--rsm);font-family:'Mulish',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;margin-top:6px;letter-spacing:.4px}
+.login-btn:hover{background:var(--gold);transform:translateY(-1px);box-shadow:0 6px 20px rgba(176,141,87,.3)}
 
 /* ── MAIN ── */
-.app{max-width:960px;margin:0 auto;width:100%;padding:0 24px;flex:1;display:flex;flex-direction:column}
-header{padding:26px 0 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1.5px solid var(--ink);margin-bottom:26px;gap:14px}
-.logo-main{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:24px;letter-spacing:-.5px}
+.app{max-width:960px;margin:0 auto;width:100%;padding:0 24px;flex:1;display:flex;flex-direction:column;position:relative;z-index:1}
+header{padding:22px 0 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1.5px solid var(--ink);margin-bottom:26px;gap:14px}
+.logo-wrap{display:flex;align-items:center;gap:12px}
+.logo-icon{font-size:28px;line-height:1}
+.logo-main{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:24px;letter-spacing:-.5px;line-height:1.1}
 .logo-main span{color:var(--gold)}
 .logo-eyebrow{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);font-weight:700;margin-bottom:2px}
 .header-right{display:flex;align-items:center;gap:10px}
-.user-pill{display:flex;align-items:center;gap:8px;background:var(--surface);border:1.5px solid var(--border);border-radius:30px;padding:4px 13px 4px 4px}
+.user-pill{display:flex;align-items:center;gap:8px;background:var(--surface);border:1.5px solid var(--border);border-radius:30px;padding:4px 13px 4px 4px;transition:border-color .2s}
+.user-pill:hover{border-color:var(--border2)}
 .user-av{width:28px;height:28px;border-radius:50%;background:var(--ink);color:var(--gold2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0}
 .user-name{font-size:13px;font-weight:600;color:var(--ink2);max-width:130px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.logout-btn{background:none;border:none;color:var(--ink4);font-size:12px;cursor:pointer;padding:3px;transition:color .2s}
+.logout-btn{background:none;border:none;color:var(--ink4);font-size:12px;cursor:pointer;padding:3px;transition:color .2s;line-height:1}
 .logout-btn:hover{color:var(--red)}
 .nav-tabs{display:flex;border:1.5px solid var(--ink);border-radius:8px;overflow:hidden}
 .nav-tab{padding:8px 16px;font-family:'Mulish',sans-serif;font-size:13px;font-weight:600;cursor:pointer;background:transparent;border:none;color:var(--ink3);border-right:1.5px solid var(--ink);transition:all .2s;white-space:nowrap}
@@ -78,158 +91,197 @@ header{padding:26px 0 20px;display:flex;align-items:center;justify-content:space
 .card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);padding:24px}
 
 /* product banner */
-.pb{background:var(--ink);border-radius:var(--r);padding:20px 26px;display:flex;align-items:flex-start;gap:16px;overflow:hidden;position:relative}
-.pb::before{content:'';position:absolute;right:-40px;top:-40px;width:160px;height:160px;border-radius:50%;background:rgba(176,141,87,.1)}
-.pb-icon{font-size:34px;flex-shrink:0;position:relative;z-index:1}
-.pb-body{position:relative;z-index:1}
-.pb-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:3px}
-.pb-name{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:700;color:#fff;margin-bottom:4px}
-.pb-desc{font-size:13px;color:rgba(255,255,255,.5);line-height:1.55;max-width:540px}
-.pb-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
-.pb-tag{background:rgba(176,141,87,.2);border:1px solid rgba(176,141,87,.3);color:var(--gold2);padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600}
+.pb{background:var(--ink);border-radius:var(--r);padding:22px 28px;display:flex;align-items:flex-start;gap:18px;overflow:hidden;position:relative}
+.pb::before{content:'';position:absolute;right:-40px;top:-40px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(176,141,87,.15),transparent 70%)}
+.pb::after{content:'';position:absolute;left:0;bottom:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(176,141,87,.3),transparent)}
+.pb-icon{font-size:36px;flex-shrink:0;position:relative;z-index:1;line-height:1;margin-top:2px}
+.pb-body{position:relative;z-index:1;flex:1}
+.pb-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:4px}
+.pb-name{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:#fff;margin-bottom:5px}
+.pb-desc{font-size:13px;color:rgba(255,255,255,.5);line-height:1.6;max-width:580px}
+.pb-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
+.pb-tag{background:rgba(176,141,87,.18);border:1px solid rgba(176,141,87,.28);color:var(--gold2);padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:.3px}
 
 /* input tabs */
-.itabs{display:flex;margin-bottom:16px;border-bottom:1.5px solid var(--border)}
-.itab{padding:8px 16px;font-size:13px;font-weight:600;color:var(--ink3);cursor:pointer;background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-1.5px;transition:all .2s;font-family:'Mulish',sans-serif}
+.itabs{display:flex;margin-bottom:18px;border-bottom:1.5px solid var(--border)}
+.itab{padding:9px 18px;font-size:13px;font-weight:600;color:var(--ink3);cursor:pointer;background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-1.5px;transition:all .2s;font-family:'Mulish',sans-serif}
 .itab.active{color:var(--gold);border-bottom-color:var(--gold)}
+.itab:hover:not(.active){color:var(--ink2)}
 .tc{display:none}.tc.active{display:block}
-.tinput{width:100%;min-height:180px;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--rsm);padding:15px;font-family:'Cormorant Garamond',serif;font-size:15px;line-height:1.8;color:var(--ink2);resize:vertical;outline:none;transition:border-color .2s}
-.tinput:focus{border-color:var(--gold)}
+.tinput{width:100%;min-height:180px;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--rsm);padding:15px;font-family:'Cormorant Garamond',serif;font-size:15px;line-height:1.8;color:var(--ink2);resize:vertical;outline:none;transition:border-color .2s,box-shadow .2s}
+.tinput:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(176,141,87,.08)}
 .tinput::placeholder{color:var(--ink4);font-style:italic}
-.sinput{width:100%;min-height:100px;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--rsm);padding:15px;font-family:'Mulish',sans-serif;font-size:14px;line-height:1.7;color:var(--ink2);resize:vertical;outline:none;transition:border-color .2s}
-.sinput:focus{border-color:var(--gold)}
+.sinput{width:100%;min-height:110px;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--rsm);padding:15px;font-family:'Mulish',sans-serif;font-size:14px;line-height:1.7;color:var(--ink2);resize:vertical;outline:none;transition:border-color .2s,box-shadow .2s}
+.sinput:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(176,141,87,.08)}
 .sinput::placeholder{color:var(--ink4)}
-.abtn{margin-top:16px;background:var(--ink);color:#fff;border:none;padding:12px 26px;border-radius:var(--rsm);font-family:'Mulish',sans-serif;font-size:13px;font-weight:700;letter-spacing:.4px;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:8px}
-.abtn:hover{background:var(--gold)}.abtn:disabled{background:var(--ink4);cursor:not-allowed}
+.abtn{margin-top:16px;background:var(--ink);color:#fff;border:none;padding:12px 28px;border-radius:var(--rsm);font-family:'Mulish',sans-serif;font-size:13px;font-weight:700;letter-spacing:.5px;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:8px}
+.abtn:hover{background:var(--gold);transform:translateY(-1px);box-shadow:0 6px 20px rgba(176,141,87,.25)}
+.abtn:disabled{background:var(--ink4);cursor:not-allowed;transform:none;box-shadow:none}
 
 /* analysis result */
 .ares{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);overflow:hidden;animation:slideIn .4s ease}
-.ares-hdr{background:var(--ink);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;gap:10px}
-.ares-title{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:16px;color:#fff}
-.ares-badge{padding:4px 14px;border-radius:20px;font-size:13px;font-weight:800;font-family:'Mulish',sans-serif}
-.ares-badge.high{background:var(--green);color:#fff}.ares-badge.mid{background:var(--orange);color:#fff}.ares-badge.low{background:var(--red);color:#fff}
-.phases{padding:22px;display:flex;flex-direction:column;gap:20px}
+.ares-hdr{background:var(--ink);padding:18px 24px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.ares-title{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:17px;color:#fff}
+.ares-badge{padding:5px 16px;border-radius:20px;font-size:13px;font-weight:800;font-family:'Mulish',sans-serif}
+.ares-badge.high{background:var(--green);color:#fff}
+.ares-badge.mid{background:var(--orange);color:#fff}
+.ares-badge.low{background:var(--red);color:#fff}
+.phases{padding:24px;display:flex;flex-direction:column;gap:22px}
 .phase{border-left:2.5px solid var(--border2);padding-left:18px;position:relative}
 .phase.ok{border-left-color:var(--green)}.phase.warn{border-left-color:var(--orange)}.phase.bad{border-left-color:var(--red)}
-.phase-dot{width:8px;height:8px;border-radius:50%;position:absolute;left:-5px;top:5px;background:var(--border2)}
+.phase-dot{width:9px;height:9px;border-radius:50%;position:absolute;left:-5.5px;top:4px;background:var(--border2)}
 .phase.ok .phase-dot{background:var(--green)}.phase.warn .phase-dot{background:var(--orange)}.phase.bad .phase-dot{background:var(--red)}
-.phase-name{font-size:10px;letter-spacing:1.8px;text-transform:uppercase;color:var(--ink3);margin-bottom:5px;font-weight:700}
-.phase-said{font-family:'Cormorant Garamond',serif;font-size:14.5px;font-style:italic;color:var(--ink2);background:var(--surface2);border:1px solid var(--border);border-radius:var(--rxs);padding:9px 13px;margin:7px 0;line-height:1.6}
+.phase-name{font-size:10px;letter-spacing:1.8px;text-transform:uppercase;color:var(--ink3);margin-bottom:6px;font-weight:700}
+.phase-said{font-family:'Cormorant Garamond',serif;font-size:14.5px;font-style:italic;color:var(--ink2);background:var(--surface2);border:1px solid var(--border);border-radius:var(--rxs);padding:10px 14px;margin:8px 0;line-height:1.65}
 .phase-said::before{content:'«'}.phase-said::after{content:'»'}
-.phase-comment{font-size:14px;color:var(--ink2);line-height:1.65;margin-bottom:8px}
-.alt-label{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--green);font-weight:700;margin-bottom:6px}
-.alt-item{background:var(--green-bg);border:1px solid var(--green-bdr);border-radius:var(--rxs);padding:9px 13px;font-size:14px;color:var(--ink2);line-height:1.65;margin-bottom:5px;font-family:'Cormorant Garamond',serif;font-style:italic}
+.phase-comment{font-size:14px;color:var(--ink2);line-height:1.7;margin-bottom:9px}
+.alt-label{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--green);font-weight:700;margin-bottom:7px;display:flex;align-items:center;gap:6px}
+.alt-item{background:var(--green-bg);border:1px solid var(--green-bdr);border-radius:var(--rxs);padding:10px 14px;font-size:14px;color:var(--ink2);line-height:1.65;margin-bottom:5px;font-family:'Cormorant Garamond',serif;font-style:italic;transition:border-color .2s}
+.alt-item:hover{border-color:var(--green)}
 .alt-item::before{content:'✦ ';color:var(--green);font-style:normal;font-family:'Mulish',sans-serif}
-.scores-blk{margin:0 22px 22px;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--rsm);padding:18px}
-.scores-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px}
-.score-lbl{font-size:10px;letter-spacing:.8px;text-transform:uppercase;color:var(--ink3);margin-bottom:6px;font-weight:700}
-.score-bar{background:var(--border);border-radius:3px;height:4px;overflow:hidden;margin-bottom:5px}
-.score-fill{height:100%;border-radius:3px;transition:width 1.2s ease}
-.score-val{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:21px;color:var(--ink)}
-.summary-blk{font-size:14px;color:var(--ink2);line-height:1.75;border-top:1px solid var(--border);padding-top:14px}
-.summary-blk p{margin-bottom:8px}.summary-blk p:last-child{margin-bottom:0}
-.notify-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-.badge-tg{display:inline-flex;align-items:center;gap:5px;background:var(--blue-bg);border:1px solid rgba(42,95,138,.2);color:var(--blue);padding:4px 11px;border-radius:20px;font-size:12px;font-weight:600}
-.badge-gs{display:inline-flex;align-items:center;gap:5px;background:var(--green-bg);border:1px solid var(--green-bdr);color:var(--green);padding:4px 11px;border-radius:20px;font-size:12px;font-weight:600}
+.scores-blk{margin:0 24px 24px;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--rsm);padding:20px}
+.scores-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:18px}
+.score-lbl{font-size:10px;letter-spacing:.8px;text-transform:uppercase;color:var(--ink3);margin-bottom:7px;font-weight:700}
+.score-bar{background:var(--border);border-radius:3px;height:5px;overflow:hidden;margin-bottom:6px}
+.score-fill{height:100%;border-radius:3px;transition:width 1.4s cubic-bezier(.16,1,.3,1)}
+.score-val{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:22px;color:var(--ink)}
+.summary-blk{font-size:14px;color:var(--ink2);line-height:1.75;border-top:1px solid var(--border);padding-top:16px}
+.summary-blk p{margin-bottom:9px}.summary-blk p:last-child{margin-bottom:0}
+.notify-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.badge-tg{display:inline-flex;align-items:center;gap:5px;background:var(--blue-bg);border:1px solid rgba(42,95,138,.2);color:var(--blue);padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600}
+.badge-gs{display:inline-flex;align-items:center;gap:5px;background:var(--green-bg);border:1px solid var(--green-bdr);color:var(--green);padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600}
 
 /* scenarios */
 .sc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:11px}
-.sc-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--rsm);padding:17px 15px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
-.sc-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform .3s}
-.sc-card:hover{border-color:var(--ink);transform:translateY(-2px)}.sc-card:hover::after{transform:scaleX(1)}
-.sc-card.sel{border-color:var(--gold);background:var(--gold-bg)}.sc-card.sel::after{transform:scaleX(1)}
-.sc-icon{font-size:21px;margin-bottom:9px}
+.sc-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--rsm);padding:18px 16px;cursor:pointer;transition:all .25s;position:relative;overflow:hidden}
+.sc-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold2));transform:scaleX(0);transform-origin:left;transition:transform .3s}
+.sc-card:hover{border-color:var(--ink);transform:translateY(-2px);box-shadow:0 6px 20px rgba(26,23,20,.08)}
+.sc-card:hover::after{transform:scaleX(1)}
+.sc-card.sel{border-color:var(--gold);background:var(--gold-bg);box-shadow:0 0 0 1px var(--gold)}
+.sc-card.sel::after{transform:scaleX(1)}
+.sc-icon{font-size:22px;margin-bottom:10px;display:block}
 .sc-name{font-weight:700;font-size:13px;color:var(--ink);margin-bottom:4px}
-.sc-desc{font-size:12px;color:var(--ink3);line-height:1.4}
+.sc-desc{font-size:12px;color:var(--ink3);line-height:1.45}
 .diff-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .diff-lbl{font-size:13px;color:var(--ink3);font-weight:600}
-.diff-btn{padding:7px 15px;border-radius:var(--rxs);border:1.5px solid var(--border);background:transparent;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'Mulish',sans-serif;color:var(--ink3)}
-.diff-btn:hover{border-color:var(--ink);color:var(--ink)}
+.diff-btn{padding:7px 16px;border-radius:var(--rxs);border:1.5px solid var(--border);background:transparent;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'Mulish',sans-serif;color:var(--ink3)}
+.diff-btn:hover{border-color:var(--ink2);color:var(--ink)}
 .diff-btn.active{border-color:var(--ink);background:var(--ink);color:#fff}
-.start-btn{background:var(--gold);color:#fff;border:none;padding:13px 32px;border-radius:var(--rsm);font-family:'Mulish',sans-serif;font-size:14px;font-weight:800;letter-spacing:.4px;cursor:pointer;transition:all .2s;align-self:flex-start;display:flex;align-items:center;gap:8px}
-.start-btn:hover{background:#9a7a49;transform:translateY(-1px);box-shadow:0 6px 24px rgba(176,141,87,.3)}
-.start-btn:disabled{background:var(--ink4);cursor:not-allowed;transform:none;box-shadow:none}
+.start-btn{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#fff;border:none;padding:14px 34px;border-radius:var(--rsm);font-family:'Mulish',sans-serif;font-size:14px;font-weight:800;letter-spacing:.5px;cursor:pointer;transition:all .25s;align-self:flex-start;display:flex;align-items:center;gap:9px;box-shadow:0 4px 16px rgba(176,141,87,.2)}
+.start-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(176,141,87,.35)}
+.start-btn:disabled{background:var(--border2);color:var(--ink4);cursor:not-allowed;transform:none;box-shadow:none}
 
 /* chat */
-.chat-panel{display:none;flex-direction:column;flex:1;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);overflow:hidden;min-height:520px}
+.chat-panel{display:none;flex-direction:column;flex:1;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);overflow:hidden;min-height:520px;box-shadow:0 4px 24px rgba(26,23,20,.06)}
 .chat-panel.active{display:flex}
-.chat-topbar{background:var(--ink);padding:13px 20px;display:flex;align-items:center;justify-content:space-between;gap:10px}
-.chat-scenario{font-size:10.5px;letter-spacing:.4px;color:rgba(255,255,255,.4);margin-bottom:2px}
-.chat-title-bar{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:15px;color:#fff}
+.chat-topbar{background:var(--ink);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.chat-scenario{font-size:10.5px;letter-spacing:.5px;color:rgba(255,255,255,.35);margin-bottom:2px}
+.chat-title-bar{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:16px;color:#fff}
 .chat-topright{display:flex;align-items:center;gap:9px}
-.turn-chip{font-size:11px;color:rgba(255,255,255,.4);background:rgba(255,255,255,.08);padding:4px 10px;border-radius:20px}
-.end-btn{background:rgba(192,57,43,.2);color:#ff8f85;border:1px solid rgba(192,57,43,.35);padding:6px 13px;border-radius:var(--rxs);font-size:12px;font-weight:700;cursor:pointer;font-family:'Mulish',sans-serif;transition:all .2s}
-.end-btn:hover{background:rgba(192,57,43,.35)}
-.chat-msgs{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:13px;background:var(--surface2);max-height:400px}
-.chat-msgs::-webkit-scrollbar{width:3px}.chat-msgs::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
-.chat-msg{display:flex;gap:9px;animation:msgIn .3s ease forwards;opacity:0}
+.turn-chip{font-size:11px;color:rgba(255,255,255,.4);background:rgba(255,255,255,.08);padding:4px 11px;border-radius:20px;font-weight:600}
+.end-btn{background:rgba(192,57,43,.2);color:#ff8f85;border:1px solid rgba(192,57,43,.35);padding:6px 14px;border-radius:var(--rxs);font-size:12px;font-weight:700;cursor:pointer;font-family:'Mulish',sans-serif;transition:all .2s}
+.end-btn:hover{background:rgba(192,57,43,.4);color:#fff}
+.chat-msgs{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:14px;background:var(--surface2);max-height:420px}
+.chat-msgs::-webkit-scrollbar{width:4px}.chat-msgs::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.chat-msg{display:flex;gap:10px;animation:msgIn .3s ease forwards;opacity:0}
 .chat-msg.agent{flex-direction:row-reverse}
-.chat-av{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;margin-top:2px}
+.chat-av{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;margin-top:2px}
 .chat-av.client{background:var(--blue-bg);border:1px solid rgba(42,95,138,.15)}
 .chat-av.agent{background:var(--gold-bg);border:1px solid var(--gold-bdr)}
-.chat-bubble{max-width:72%;padding:10px 14px;border-radius:10px;font-size:14px;line-height:1.65;color:var(--ink2)}
+.chat-bubble{max-width:72%;padding:11px 15px;border-radius:11px;font-size:14px;line-height:1.65;color:var(--ink2)}
 .chat-msg.client .chat-bubble{background:var(--surface);border:1px solid var(--border);border-top-left-radius:3px}
-.chat-msg.agent  .chat-bubble{background:var(--gold-bg);border:1px solid var(--gold-bdr);border-top-right-radius:3px}
-.typing-ind{display:flex;gap:9px;align-items:center}
-.typing-wrap{background:var(--surface);border:1px solid var(--border);border-radius:10px;border-top-left-radius:3px;padding:11px 14px;display:flex;gap:4px}
-.td{width:5px;height:5px;border-radius:50%;background:var(--ink3);animation:td 1.2s infinite}
+.chat-msg.agent .chat-bubble{background:var(--gold-bg);border:1px solid var(--gold-bdr);border-top-right-radius:3px}
+.typing-ind{display:flex;gap:10px;align-items:center}
+.typing-wrap{background:var(--surface);border:1px solid var(--border);border-radius:11px;border-top-left-radius:3px;padding:12px 15px;display:flex;gap:5px;align-items:center}
+.td{width:5px;height:5px;border-radius:50%;background:var(--ink4);animation:td 1.2s infinite}
 .td:nth-child(2){animation-delay:.2s}.td:nth-child(3){animation-delay:.4s}
 .chat-input-row{padding:13px 14px;display:flex;gap:9px;border-top:1px solid var(--border);background:var(--surface)}
-.chat-field{flex:1;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--rsm);padding:9px 13px;font-family:'Mulish',sans-serif;font-size:14px;color:var(--ink);outline:none;resize:none;max-height:100px;transition:border-color .2s}
-.chat-field:focus{border-color:var(--gold)}
+.chat-field{flex:1;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--rsm);padding:10px 14px;font-family:'Mulish',sans-serif;font-size:14px;color:var(--ink);outline:none;resize:none;max-height:100px;transition:border-color .2s,box-shadow .2s;line-height:1.5}
+.chat-field:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(176,141,87,.08)}
 .chat-field::placeholder{color:var(--ink4)}
-.send-btn{width:40px;height:40px;background:var(--ink);border:none;border-radius:var(--rsm);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
-.send-btn:hover{background:var(--gold)}.send-btn svg{width:17px;height:17px;fill:#fff}
+.send-btn{width:42px;height:42px;background:var(--ink);border:none;border-radius:var(--rsm);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;align-self:flex-end}
+.send-btn:hover{background:var(--gold);transform:scale(1.05)}
+.send-btn svg{width:17px;height:17px;fill:#fff}
 
 /* debrief */
 .deb{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);overflow:hidden;animation:slideIn .5s ease}
-.deb-hdr{background:var(--ink);padding:18px 24px;display:flex;align-items:center;justify-content:space-between;gap:10px}
-.deb-title{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:17px;color:#fff}
-.deb-meta{font-size:13px;color:rgba(255,255,255,.4)}
-.deb-body{padding:24px}
-.skill-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:11px;margin-bottom:20px}
-.sk-cell{background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--rsm);padding:13px 10px;text-align:center}
-.sk-lbl{font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--ink3);margin-bottom:7px;font-weight:700}
-.sk-val{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:26px;color:var(--ink)}
+.deb-hdr{background:var(--ink);padding:20px 26px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.deb-title{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:18px;color:#fff}
+.deb-meta{font-size:13px;color:rgba(255,255,255,.4);font-weight:600}
+.deb-body{padding:26px}
+.skill-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:11px;margin-bottom:22px}
+.sk-cell{background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--rsm);padding:14px 10px;text-align:center;transition:border-color .2s,transform .2s}
+.sk-cell:hover{transform:translateY(-1px)}
+.sk-lbl{font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--ink3);margin-bottom:8px;font-weight:700}
+.sk-val{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:28px;color:var(--ink);line-height:1}
 .sk-val.green{color:var(--green)}.sk-val.orange{color:var(--orange)}.sk-val.red{color:var(--red)}.sk-val.gold{color:var(--gold)}
-.moments{display:flex;flex-direction:column;gap:11px;margin-bottom:20px}
-.moment{border-left:2.5px solid var(--border2);padding:11px 15px;border-radius:0 var(--rsm) var(--rsm) 0;background:var(--surface2)}
+.moments{display:flex;flex-direction:column;gap:11px;margin-bottom:22px}
+.moment{border-left:3px solid var(--border2);padding:12px 16px;border-radius:0 var(--rsm) var(--rsm) 0;background:var(--surface2);transition:transform .2s}
+.moment:hover{transform:translateX(2px)}
 .moment.good{border-left-color:var(--green);background:var(--green-bg)}
 .moment.bad{border-left-color:var(--red);background:var(--red-bg)}
 .moment.tip{border-left-color:var(--gold);background:var(--gold-bg)}
 .moment-tag{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;font-weight:700;margin-bottom:5px}
 .moment.good .moment-tag{color:var(--green)}.moment.bad .moment-tag{color:var(--red)}.moment.tip .moment-tag{color:var(--gold)}
 .moment-text{font-size:14px;color:var(--ink2);line-height:1.65}
-.moment-alt{margin-top:8px;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:var(--green);padding:8px 12px;background:var(--surface);border-radius:var(--rxs);border:1px solid var(--green-bdr)}
+.moment-alt{margin-top:9px;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:var(--green);padding:9px 13px;background:var(--surface);border-radius:var(--rxs);border:1px solid var(--green-bdr)}
 .moment-alt::before{content:'Лучше было сказать: ';font-style:normal;color:var(--ink3);font-family:'Mulish',sans-serif;font-size:10px;letter-spacing:.5px;text-transform:uppercase;display:block;margin-bottom:3px}
-.verdict-box{background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--rsm);padding:16px;margin-bottom:20px}
-.verdict-box p{font-size:14px;color:var(--ink2);line-height:1.7;margin-bottom:7px}.verdict-box p:last-child{margin-bottom:0}
-.deb-actions{display:flex;gap:9px;flex-wrap:wrap}
-.btn-retry{background:transparent;border:1.5px solid var(--border2);color:var(--ink2);padding:10px 20px;border-radius:var(--rsm);font-family:'Mulish',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s}
-.btn-retry:hover{border-color:var(--ink);color:var(--ink)}
-.btn-new{background:var(--ink);color:#fff;border:none;padding:10px 20px;border-radius:var(--rsm);font-family:'Mulish',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:background .2s}
-.btn-new:hover{background:var(--gold)}
+.verdict-box{background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--rsm);padding:18px;margin-bottom:22px}
+.verdict-box p{font-size:14px;color:var(--ink2);line-height:1.75;margin-bottom:8px}.verdict-box p:last-child{margin-bottom:0}
+.deb-actions{display:flex;gap:10px;flex-wrap:wrap}
+.btn-retry{background:transparent;border:1.5px solid var(--border2);color:var(--ink2);padding:11px 22px;border-radius:var(--rsm);font-family:'Mulish',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s}
+.btn-retry:hover{border-color:var(--ink);color:var(--ink);background:var(--surface2)}
+.btn-new{background:var(--ink);color:#fff;border:none;padding:11px 22px;border-radius:var(--rsm);font-family:'Mulish',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s}
+.btn-new:hover{background:var(--gold);transform:translateY(-1px);box-shadow:0 4px 16px rgba(176,141,87,.25)}
 
 /* utils */
 .spinner{width:15px;height:15px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite;flex-shrink:0}
 .spinner.dark{border-color:var(--border);border-top-color:var(--gold)}
-.loading-row{display:flex;align-items:center;gap:11px;font-size:14px;color:var(--ink3);padding:18px}
-.toast{position:fixed;bottom:22px;right:22px;background:var(--ink);border-radius:var(--rsm);padding:12px 17px;display:flex;align-items:center;gap:9px;font-size:13px;color:rgba(255,255,255,.75);z-index:8000;animation:toastIn .3s ease;max-width:280px;box-shadow:0 8px 32px rgba(0,0,0,.18)}
-.err-box{color:var(--red);padding:16px;background:var(--red-bg);border-radius:var(--r);border:1px solid var(--red-bdr)}
+.loading-row{display:flex;align-items:center;gap:12px;font-size:14px;color:var(--ink3);padding:20px}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--ink);border-radius:var(--rsm);padding:12px 18px;display:flex;align-items:center;gap:9px;font-size:13px;color:rgba(255,255,255,.8);z-index:8000;animation:toastIn .3s ease;max-width:300px;box-shadow:0 8px 32px rgba(0,0,0,.2);border:1px solid rgba(255,255,255,.06)}
+.err-box{color:var(--red);padding:16px 18px;background:var(--red-bg);border-radius:var(--r);border:1px solid var(--red-bdr);font-size:14px;line-height:1.6}
+
+/* spin grid */
+.spin-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:22px}
+.spin-cell{border-radius:var(--rsm);padding:13px 10px;text-align:center;border:1px solid}
+.spin-cell.used{background:var(--green-bg);border-color:var(--green-bdr)}
+.spin-cell.unused{background:var(--red-bg);border-color:var(--red-bdr)}
+.spin-lbl{font-size:10px;letter-spacing:.8px;text-transform:uppercase;font-weight:700;margin-bottom:6px}
+.spin-cell.used .spin-lbl{color:var(--green)}
+.spin-cell.unused .spin-lbl{color:var(--red)}
+.spin-icon{font-size:20px;line-height:1}
+
+/* phrase grid */
+.phrase-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:22px}
+.phrase-box{border-radius:var(--rsm);padding:15px;border:1px solid}
+.phrase-box.best{background:var(--green-bg);border-color:var(--green-bdr)}
+.phrase-box.worst{background:var(--red-bg);border-color:var(--red-bdr)}
+.phrase-lbl{font-size:10px;letter-spacing:1px;text-transform:uppercase;font-weight:700;margin-bottom:7px}
+.phrase-box.best .phrase-lbl{color:var(--green)}
+.phrase-box.worst .phrase-lbl{color:var(--red)}
+.phrase-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:var(--ink2);line-height:1.55}
+.phrase-box.worst .phrase-text{font-family:'Mulish',sans-serif;font-style:normal;font-size:13.5px}
+
+.talk-bar{font-size:13px;color:var(--ink3);background:var(--surface2);border:1px solid var(--border);border-radius:var(--rsm);padding:11px 15px;margin-bottom:22px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.talk-bar strong{color:var(--ink2)}
+.talk-ideal{color:var(--green);font-size:12px;margin-left:auto}
 
 @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
 @keyframes slideIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 @keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 @keyframes spin{to{transform:rotate(360deg)}}
-@keyframes td{0%,80%,100%{transform:translateY(0);opacity:.3}40%{transform:translateY(-4px);opacity:1}}
+@keyframes td{0%,80%,100%{transform:translateY(0);opacity:.3}40%{transform:translateY(-5px);opacity:1}}
 @keyframes toastIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
 @media(max-width:680px){
   .sc-grid{grid-template-columns:1fr 1fr}
   .scores-grid{grid-template-columns:1fr 1fr}
-  .skill-grid{grid-template-columns:1fr 1fr}
+  .skill-grid{grid-template-columns:repeat(3,1fr)}
+  .spin-grid{grid-template-columns:1fr 1fr}
+  .phrase-grid{grid-template-columns:1fr}
   header{flex-direction:column;align-items:flex-start}
   .login-left{display:none}
+  .pb{flex-direction:column;gap:12px}
 }
 </style>
 </head>
@@ -237,7 +289,6 @@ header{padding:26px 0 20px;display:flex;align-items:center;justify-content:space
 
 <!-- ════════════ КОНФИГ ПРОДУКТА ════════════ -->
 <script>
-
 const PRODUCT = {
   companyName:  "Qazaq Grill",
   productName:  "Запечённый барашек и национальные блюда",
@@ -268,11 +319,12 @@ const PRODUCT = {
 <!-- ACCESS GATE -->
 <div id="accessGate">
   <div class="gate-card">
+    <span class="gate-emblem">🥩</span>
     <div class="gate-logo">Sales<span>Coach</span></div>
-    <div class="gate-sub">Введите код доступа, который вам прислали</div>
+    <div class="gate-sub">Тренажёр продаж Qazaq Grill<br>Введите код доступа, который вам прислали</div>
     <input class="gate-input" id="tokenInput" type="text" placeholder="КОД ДОСТУПА"
       onkeydown="if(event.key==='Enter')checkToken()">
-    <button class="gate-btn" onclick="checkToken()">Войти</button>
+    <button class="gate-btn" onclick="checkToken()">Войти →</button>
     <div class="gate-err" id="gateErr">Неверный код. Запросите у администратора.</div>
   </div>
 </div>
@@ -281,9 +333,8 @@ const PRODUCT = {
 <div id="loginGate" style="display:none">
   <div class="login-wrap">
     <div class="login-left">
-      <div>
-        <div class="ll-logo">Sales<span>Coach</span></div>
-      </div>
+      <span class="ll-emblem">🥩</span>
+      <div class="ll-logo">Sales<span>Coach</span></div>
       <ul class="ll-list">
         <li>Тренировки с AI-клиентом</li>
         <li>Разбор реальных звонков</li>
@@ -316,9 +367,12 @@ const PRODUCT = {
 <!-- MAIN APP -->
 <div class="app" id="mainApp" style="display:none">
   <header>
-    <div>
-      <div class="logo-eyebrow" id="hCompany">Тренажёр продаж</div>
-      <div class="logo-main">Sales<span>Coach</span></div>
+    <div class="logo-wrap">
+      <span class="logo-icon">🥩</span>
+      <div class="logo-text">
+        <div class="logo-eyebrow" id="hCompany">Тренажёр продаж</div>
+        <div class="logo-main">Sales<span>Coach</span></div>
+      </div>
     </div>
     <div class="header-right">
       <div class="user-pill">
@@ -336,7 +390,7 @@ const PRODUCT = {
   <!-- ANALYZE -->
   <div class="panel active" id="panel-analyze">
     <div class="pb">
-      <div class="pb-icon" id="pIcon">🏢</div>
+      <div class="pb-icon" id="pIcon">🥩</div>
       <div class="pb-body">
         <div class="pb-label">Объект продажи</div>
         <div class="pb-name" id="pName">—</div>
@@ -352,7 +406,7 @@ const PRODUCT = {
           <button class="itab" onclick="switchITab('summary')">Краткий пересказ</button>
         </div>
         <div class="tc active" id="tc-full">
-          <textarea class="tinput" id="tfull" placeholder="Менеджер: Добрый день! По объявлению о квартире...&#10;Клиент: Да, звоню насчёт 2-комнатной..."></textarea>
+          <textarea class="tinput" id="tfull" placeholder="Менеджер: Добрый день! Вас интересует барашек на мероприятие?&#10;Клиент: Да, хотели бы узнать подробнее..."></textarea>
         </div>
         <div class="tc" id="tc-summary">
           <textarea class="sinput" id="tsummary" placeholder="Опишите кратко: как начался звонок, что спрашивал клиент, какие возражения, чем закончилось..."></textarea>
@@ -367,7 +421,7 @@ const PRODUCT = {
   <div class="panel" id="panel-train">
     <div id="trainSetup">
       <div class="pb">
-        <div class="pb-icon">🏢</div>
+        <div class="pb-icon">🥩</div>
         <div class="pb-body">
           <div class="pb-label">Вы продаёте</div>
           <div class="pb-name" id="tName">—</div>
@@ -416,40 +470,47 @@ const PRODUCT = {
 </div>
 
 <script>
-/* ═══════════════════════════════════════════════════
+/* ═══════════════════════════════════════════
    STATE
-═══════════════════════════════════════════════════ */
+═══════════════════════════════════════════ */
 let user = {name:'',role:'',tgId:'',initials:''};
 let selScenario = null, selDiff = 'easy';
 let chatHistory = [], turns = 0;
 let iTabMode = 'full';
+let debriefRunning = false;
 
-/* ═══════════════════════════════════════════════════
-   ACCESS TOKEN CHECK
-   Токен хранится в env на сервере. Мы проверяем его
-   через /api/check — браузер никогда не видит значение.
-═══════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════
+   ACCESS TOKEN
+═══════════════════════════════════════════ */
 async function checkToken() {
   const token = document.getElementById('tokenInput').value.trim();
   if (!token) return;
-
+  const btn = document.querySelector('.gate-btn');
+  btn.disabled = true;
+  btn.textContent = '...';
   try {
     const r = await fetch('/api/check', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
       body: JSON.stringify({token})
     });
     const d = await r.json();
     if (d.ok) {
-      sessionStorage.setItem('sc_access', '1');
+      sessionStorage.setItem('sc_access','1');
       document.getElementById('accessGate').style.display = 'none';
       showLoginOrApp();
     } else {
-      document.getElementById('gateErr').style.display = 'block';
+      const err = document.getElementById('gateErr');
+      err.textContent = 'Неверный код. Запросите у администратора.';
+      err.style.display = 'block';
     }
   } catch(e) {
-    document.getElementById('gateErr').textContent = 'Ошибка соединения. Попробуйте снова.';
-    document.getElementById('gateErr').style.display = 'block';
+    const err = document.getElementById('gateErr');
+    err.textContent = 'Ошибка соединения. Попробуйте снова.';
+    err.style.display = 'block';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Войти →';
   }
 }
 
@@ -461,7 +522,6 @@ function showLoginOrApp() {
   document.getElementById('loginGate').style.display = 'flex';
 }
 
-// При загрузке
 window.addEventListener('DOMContentLoaded', () => {
   if (sessionStorage.getItem('sc_access') === '1') {
     document.getElementById('accessGate').style.display = 'none';
@@ -469,9 +529,9 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-/* ═══════════════════════════════════════════════════
+/* ═══════════════════════════════════════════
    LOGIN
-═══════════════════════════════════════════════════ */
+═══════════════════════════════════════════ */
 function doLogin() {
   const name = document.getElementById('inName').value.trim();
   if (!name) { alert('Введите ваше имя'); return; }
@@ -493,37 +553,35 @@ function doLogout() {
 }
 
 function showApp() {
-  document.getElementById('mainApp').style.display = 'flex';
-  document.getElementById('mainApp').style.flexDirection = 'column';
+  document.getElementById('mainApp').style.cssText = 'display:flex;flex-direction:column';
   document.getElementById('hCompany').textContent = PRODUCT.companyName + ' — Тренажёр продаж';
   document.getElementById('uAv').textContent = user.initials;
   document.getElementById('uName').textContent = user.name;
-  // banners
   document.getElementById('pIcon').textContent = PRODUCT.productEmoji;
   document.getElementById('pName').textContent = PRODUCT.productName;
   document.getElementById('pDesc').textContent = PRODUCT.productDesc;
   document.getElementById('tName').textContent = PRODUCT.productName;
   document.getElementById('pTags').innerHTML =
     PRODUCT.productTags.map(t=>`<span class="pb-tag">${t}</span>`).join('');
-  // scenarios
   document.getElementById('scenarioGrid').innerHTML =
     PRODUCT.scenarios.map(s=>`
       <div class="sc-card" onclick="pickScenario(this,'${s.id}')">
-        <div class="sc-icon">${s.icon}</div>
+        <span class="sc-icon">${s.icon}</span>
         <div class="sc-name">${s.name}</div>
         <div class="sc-desc">${s.desc}</div>
       </div>`).join('');
 }
 
-/* ═══════════════════════════════════════════════════
+/* ═══════════════════════════════════════════
    NAV
-═══════════════════════════════════════════════════ */
+═══════════════════════════════════════════ */
 function goPanel(tab) {
   document.querySelectorAll('.nav-tab').forEach((t,i)=>
     t.classList.toggle('active',(i===0&&tab==='analyze')||(i===1&&tab==='train')));
   document.getElementById('panel-analyze').classList.toggle('active',tab==='analyze');
   document.getElementById('panel-train').classList.toggle('active',tab==='train');
 }
+
 function switchITab(m) {
   iTabMode = m;
   document.querySelectorAll('.itab').forEach((t,i)=>
@@ -532,9 +590,9 @@ function switchITab(m) {
   document.getElementById('tc-summary').classList.toggle('active',m==='summary');
 }
 
-/* ═══════════════════════════════════════════════════
-   API HELPERS — все запросы идут на /api/*
-═══════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════
+   API
+═══════════════════════════════════════════ */
 async function apiPost(path, body) {
   const r = await fetch(path, {
     method:'POST',
@@ -548,52 +606,278 @@ async function apiPost(path, body) {
 
 const sleep = ms => new Promise(r=>setTimeout(r,ms));
 
-/* ═══════════════════════════════════════════════════
+/* ═══════════════════════════════════════════
    TOAST
-═══════════════════════════════════════════════════ */
-function toast(icon,text,ms=4000) {
-  const el=document.createElement('div');
-  el.className='toast';
-  el.innerHTML=`<span>${icon}</span><span>${text}</span>`;
+═══════════════════════════════════════════ */
+function toast(icon, text, ms=4000) {
+  const el = document.createElement('div');
+  el.className = 'toast';
+  el.innerHTML = `<span>${icon}</span><span>${text}</span>`;
   document.body.appendChild(el);
-  setTimeout(()=>{el.style.opacity='0';el.style.transition='opacity .3s';setTimeout(()=>el.remove(),300)},ms);
+  setTimeout(()=>{
+    el.style.transition = 'opacity .3s, transform .3s';
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(8px)';
+    setTimeout(()=>el.remove(), 300);
+  }, ms);
 }
 
-/* ═══════════════════════════════════════════════════
-   TELEGRAM helper
-═══════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════
+   NOTIFICATIONS
+═══════════════════════════════════════════ */
 async function tgSend(text) {
   if (!user.tgId) return;
-  try { await apiPost('/api/notify', {chatId:user.tgId, text}); } catch(e){console.warn('TG:',e.message);}
-}
-async function sheetsLog(payload) {
-  try { await apiPost('/api/log', payload); } catch(e){console.warn('Sheets:',e.message);}
+  try { await apiPost('/api/notify', {chatId:user.tgId, text}); } catch(e){ console.warn('TG:',e.message); }
 }
 
-/* ═══════════════════════════════════════════════════
+async function sheetsLog(payload) {
+  try { await apiPost('/api/log', payload); } catch(e){ console.warn('Sheets:',e.message); }
+}
+
+/* ═══════════════════════════════════════════
    ANALYZE
-═══════════════════════════════════════════════════ */
+═══════════════════════════════════════════ */
 async function runAnalysis() {
-  const txt = iTabMode==='full'
+  const txt = iTabMode === 'full'
     ? document.getElementById('tfull').value.trim()
     : document.getElementById('tsummary').value.trim();
-  if (!txt){alert('Введите текст звонка');return;}
+  if (!txt) { alert('Введите текст звонка'); return; }
 
-  const btn=document.getElementById('analyzeBtn');
-  btn.disabled=true;
-  btn.innerHTML='<div class="spinner"></div> Анализирую...';
-  document.getElementById('analysisOut').innerHTML='';
+  const btn = document.getElementById('analyzeBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner"></div> Анализирую...';
+  document.getElementById('analysisOut').innerHTML = '';
 
   try {
-    const r = await apiPost('/api/analyze',{text:txt,mode:iTabMode,productFacts:PRODUCT.productFacts});
-    renderAnalysis(r);
+    const r = await apiPost('/api/analyze', {text:txt, mode:iTabMode, productFacts:PRODUCT.productFacts});
+    renderAnalysis(r, txt);
 
     // Telegram
-    const sc=r.overall_score;
-    await tgSend(`${sc>=7?'🟢':sc>=4?'🟡':'🔴'} <b>Разбор звонка — ${user.name}</b>\n🏢 ${PRODUCT.productName}\n📊 Оценка: ${sc}/10 · ${r.outcome}\n\n💪 ${r.key_strength}\n\n⚠️ ${r.key_mistake}\n\n📝 ${r.summary}`);
-    if(user.tgId) toast('📱','Разбор отправлен в Telegram');
+    const sc = r.overall_score;
+    await tgSend(
+      `${sc>=7?'🟢':sc>=4?'🟡':'🔴'} <b>Разбор звонка — ${user.name}</b>\n` +
+      `🥩 ${PRODUCT.productName}\n` +
+      `📊 Оценка: ${sc}/10 · ${r.outcome}\n\n` +
+      `💪 ${r.key_strength || '—'}\n\n` +
+      `⚠️ ${r.key_mistake || '—'}\n\n` +
+      `📝 ${r.summary || '—'}`
+    );
+    if (user.tgId) toast('📱','Разбор отправлен в Telegram');
 
-    // Sheets
+    // Sheets — analysis type with correct fields
+    await sheetsLog({
+      type: 'analysis',
+      ts: new Date().toISOString(),
+      name: user.name,
+      role: user.role,
+      product: PRODUCT.productName,
+      outcome: r.outcome || '',
+      score: r.overall_score || 0,
+      rapport: r.scores?.rapport || '',
+      needs: r.scores?.needs_discovery || '',
+      argumentation: '',
+      objections: r.scores?.objection_handling || '',
+      closing: r.scores?.closing || '',
+      keyMistake: r.key_mistake || '',
+      keyStrength: r.key_strength || '',
+      verdict: r.summary || '',
+      transcript: txt.slice(0, 4000)
+    });
+    toast('📊','Сохранено в Google Sheets');
+
+  } catch(e) {
+    document.getElementById('analysisOut').innerHTML =
+      `<div class="err-box">⚠️ Ошибка: ${e.message}</div>`;
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = '🔍 Разобрать звонок';
+}
+
+function renderAnalysis(r) {
+  const barClrs = ['#b08d57','#2d7a4f','#c97c2e','#c0392b'];
+  const sc = r.overall_score;
+  const badge = sc>=7?'high':sc>=4?'mid':'low';
+
+  const phases = (r.phases||[]).map(p=>`
+    <div class="phase ${p.status||''}">
+      <div class="phase-dot"></div>
+      <div class="phase-name">${p.name||''}</div>
+      ${p.what_was_said ? `<div class="phase-said">${p.what_was_said}</div>` : ''}
+      <div class="phase-comment">${p.comment||''}</div>
+      ${p.alternatives?.length ? `
+        <div class="alt-label">✦ Альтернативные фразы</div>
+        ${p.alternatives.map(a=>`<div class="alt-item">${a}</div>`).join('')}
+      ` : ''}
+    </div>`).join('');
+
+  const scores = Object.keys(r.scores||{}).map((k,i)=>`
+    <div>
+      <div class="score-lbl">${r.score_labels?.[i]||k}</div>
+      <div class="score-bar"><div class="score-fill" style="width:0%;background:${barClrs[i]}" data-w="${(r.scores[k]||0)*10}"></div></div>
+      <div class="score-val">${r.scores[k]||0}/10</div>
+    </div>`).join('');
+
+  document.getElementById('analysisOut').innerHTML = `
+    <div class="ares">
+      <div class="ares-hdr">
+        <div class="ares-title">📊 Разбор звонка · ${r.outcome||'неизвестно'}</div>
+        <div class="ares-badge ${badge}">${sc}/10</div>
+      </div>
+      <div class="phases">${phases}</div>
+      <div class="scores-blk">
+        <div class="scores-grid">${scores}</div>
+        <div class="summary-blk">
+          ${r.key_strength ? `<p>💪 <strong>Сильная сторона:</strong> ${r.key_strength}</p>` : ''}
+          ${r.key_mistake  ? `<p>⚠️ <strong>Главная ошибка:</strong> ${r.key_mistake}</p>` : ''}
+          ${r.missed_opportunity ? `<p>🎯 <strong>Упущенный момент:</strong> ${r.missed_opportunity}</p>` : ''}
+          <p>📝 ${r.summary||''}</p>
+          <div class="notify-row">
+            ${user.tgId ? '<span class="badge-tg">📱 Отправлено в Telegram</span>' : ''}
+            <span class="badge-gs">📊 Сохранено в Sheets</span>
+          </div>
+        </div>
+      </div>
+    </div>`;
+
+  // Animate score bars after render
+  requestAnimationFrame(()=>{
+    document.querySelectorAll('.score-fill[data-w]').forEach(el=>{
+      const w = el.getAttribute('data-w');
+      setTimeout(()=>{ el.style.width = w + '%'; }, 100);
+    });
+  });
+}
+
+/* ═══════════════════════════════════════════
+   TRAINING
+═══════════════════════════════════════════ */
+function pickScenario(el, id) {
+  document.querySelectorAll('.sc-card').forEach(c=>c.classList.remove('sel'));
+  el.classList.add('sel');
+  selScenario = id;
+  document.getElementById('startBtn').disabled = false;
+}
+
+function setDiff(el, d) {
+  document.querySelectorAll('.diff-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  selDiff = d;
+}
+
+const scenName = () => PRODUCT.scenarios.find(s=>s.id===selScenario)?.name || selScenario || '';
+const diffName = () => ({easy:'Лёгкий клиент', medium:'Сложный', hard:'Жёсткий клиент'}[selDiff] || selDiff);
+
+async function startTraining() {
+  if (!selScenario) return;
+  chatHistory = [];
+  turns = 0;
+  debriefRunning = false;
+  document.getElementById('trainSetup').style.display = 'none';
+  document.getElementById('debriefOut').innerHTML = '';
+  document.getElementById('chatMsgs').innerHTML = '';
+  document.getElementById('chatPanel').classList.add('active');
+  document.getElementById('chatMeta').textContent = `${scenName()} · ${diffName()} · ${PRODUCT.productName}`;
+  updateTurn();
+  showTyping();
+  await sleep(900);
+  try {
+    const {text} = await apiPost('/api/chat', {
+      messages: [{role:'user', content:'Начни диалог — первая реплика клиента (1-2 предложения, естественно и коротко).'}],
+      scenarioId: selScenario,
+      difficulty: selDiff,
+      productFacts: PRODUCT.productFacts
+    });
+    chatHistory = [
+      {role:'user', content:'Начни диалог.'},
+      {role:'assistant', content:text}
+    ];
+    hideTyping();
+    addMsg('client', text.replace(/\[РЕЗУЛЬТАТ:.*?\]/g,'').trim());
+    document.getElementById('chatInput').focus();
+  } catch(e) {
+    hideTyping();
+    addMsg('client', '⚠️ Ошибка соединения: ' + e.message);
+  }
+}
+
+async function sendMsg() {
+  if (debriefRunning) return;
+  const inp = document.getElementById('chatInput');
+  const txt = inp.value.trim();
+  if (!txt) return;
+  inp.value = '';
+  inp.style.height = 'auto';
+  addMsg('agent', txt);
+  chatHistory.push({role:'user', content:txt});
+  turns++;
+  updateTurn();
+  showTyping();
+  try {
+    const {text} = await apiPost('/api/chat', {
+      messages: chatHistory,
+      scenarioId: selScenario,
+      difficulty: selDiff,
+      productFacts: PRODUCT.productFacts
+    });
+    chatHistory.push({role:'assistant', content:text});
+    hideTyping();
+    const isEnd = text.includes('[РЕЗУЛЬТАТ:');
+    addMsg('client', text.replace(/\[РЕЗУЛЬТАТ:.*?\]/g,'').trim());
+    if (isEnd || turns >= 10) {
+      debriefRunning = true;
+      await sleep(700);
+      runDebrief(text.includes('успех'));
+    }
+  } catch(e) {
+    hideTyping();
+    addMsg('client', '⚠️ Ошибка: ' + e.message);
+  }
+}
+
+function endCall() {
+  if (debriefRunning) return;
+  debriefRunning = true;
+  hideTyping();
+  runDebrief(false);
+}
+
+async function runDebrief(success) {
+  document.getElementById('chatPanel').classList.remove('active');
+  const out = document.getElementById('debriefOut');
+  out.innerHTML = '<div class="loading-row"><div class="spinner dark"></div> Анализирую переговоры...</div>';
+
+  const transcript = chatHistory
+    .filter(m => !m.content.startsWith('Начни'))
+    .map(m => `${m.role==='user'?'Менеджер':'Клиент'}: ${m.content.replace(/\[РЕЗУЛЬТАТ:.*?\]/g,'').trim()}`)
+    .join('\n');
+
+  try {
+    const r = await apiPost('/api/debrief', {
+      transcript,
+      scenario: scenName(),
+      difficulty: diffName(),
+      success,
+      productFacts: PRODUCT.productFacts
+    });
+
+    renderDebrief(r, success);
+
+    // Telegram
+    const sc = r.total || 0;
+    const bads  = (r.moments||[]).filter(m=>m.type==='bad').map(m=>`• ${m.text}`).join('\n');
+    const goods = (r.moments||[]).filter(m=>m.type==='good').map(m=>`• ${m.text}`).join('\n');
+    await tgSend(
+      `🎭 <b>Тренировка — ${user.name}</b>\n` +
+      `📋 ${scenName()} · ${diffName()}\n` +
+      `${sc>=7?'🟢':sc>=4?'🟡':'🔴'} Балл: ${sc}/10 · ${success?'✅ Закрыто':'❌ Не закрыто'}\n\n` +
+      `✅ Хорошо:\n${goods||'—'}\n\n` +
+      `❌ Ошибки:\n${bads||'—'}\n\n` +
+      `🎯 ${r.next_focus||''}`
+    );
+    if (user.tgId) toast('📱','Разбор отправлен в Telegram');
+
+    // Sheets — training type with keyMistake/keyStrength from moments
     await sheetsLog({
       type: 'training',
       ts: new Date().toISOString(),
@@ -603,230 +887,101 @@ async function runAnalysis() {
       scenario: scenName(),
       difficulty: diffName(),
       success,
-      total: r.total,
-      rapport: r.scores.rapport,
-      needs: r.scores.needs_discovery,
-      argumentation: r.scores.argumentation,
-      objections: r.scores.objections,
-      closing: r.scores.closing,
-      verdict: r.verdict,
-      nextFocus: r.next_focus,
-      keyMistake: (r.moments || []).filter(m => m.type === 'bad').map(m => m.text).join(' | ') || '',
-      keyStrength: (r.moments || []).filter(m => m.type === 'good').map(m => m.text).join(' | ') || '',
+      total: r.total || 0,
+      rapport: r.scores?.rapport || '',
+      needs: r.scores?.needs_discovery || '',
+      argumentation: r.scores?.argumentation || '',
+      objections: r.scores?.objections || '',
+      closing: r.scores?.closing || '',
+      verdict: r.verdict || '',
+      nextFocus: r.next_focus || '',
+      keyMistake: (r.moments||[]).filter(m=>m.type==='bad').map(m=>m.text).join(' | ') || '',
+      keyStrength: (r.moments||[]).filter(m=>m.type==='good').map(m=>m.text).join(' | ') || '',
       transcript: transcript.slice(0, 4000)
     });
     toast('📊','Сохранено в Google Sheets');
 
   } catch(e) {
-    document.getElementById('analysisOut').innerHTML=`<div class="err-box">⚠️ Ошибка: ${e.message}</div>`;
+    out.innerHTML = `<div class="err-box">⚠️ Ошибка анализа: ${e.message}</div>`;
   }
-  btn.disabled=false;
-  btn.innerHTML='🔍 Разобрать звонок';
 }
 
-function renderAnalysis(r) {
-  const barClrs=['#b08d57','#2d7a4f','#c97c2e','#c0392b'];
-  const sc=r.overall_score;
-  const badge=sc>=7?'high':sc>=4?'mid':'low';
-  const phases=r.phases.map(p=>`
-    <div class="phase ${p.status}">
-      <div class="phase-dot"></div>
-      <div class="phase-name">${p.name}</div>
-      ${p.what_was_said?`<div class="phase-said">${p.what_was_said}</div>`:''}
-      <div class="phase-comment">${p.comment}</div>
-      ${p.alternatives?.length?`<div class="alt-label">✦ Альтернативные фразы</div>${p.alternatives.map(a=>`<div class="alt-item">${a}</div>`).join('')}`:''}
+function renderDebrief(r, success) {
+  const out = document.getElementById('debriefOut');
+  const labels = ['Контакт','Потребности','Аргументация','Возражения','Закрытие'];
+  const keys = Object.keys(r.scores||{});
+  const clr = v => v>=7?'green':v>=4?'orange':'red';
+
+  const cells = keys.map((k,i) => `
+    <div class="sk-cell">
+      <div class="sk-lbl">${labels[i]||k}</div>
+      <div class="sk-val ${clr(r.scores[k])}">${r.scores[k]}</div>
     </div>`).join('');
-  const scores=Object.keys(r.scores).map((k,i)=>`
-    <div>
-      <div class="score-lbl">${r.score_labels?.[i]||k}</div>
-      <div class="score-bar"><div class="score-fill" style="width:${r.scores[k]*10}%;background:${barClrs[i]}"></div></div>
-      <div class="score-val">${r.scores[k]}/10</div>
-    </div>`).join('');
-  document.getElementById('analysisOut').innerHTML=`
-    <div class="ares">
-      <div class="ares-hdr">
-        <div class="ares-title">📊 Разбор звонка · ${r.outcome}</div>
-        <div class="ares-badge ${badge}">${r.overall_score}/10</div>
-      </div>
-      <div class="phases">${phases}</div>
-      <div class="scores-blk">
-        <div class="scores-grid">${scores}</div>
-        <div class="summary-blk">
-          ${r.key_strength?`<p>💪 <strong>Сильная сторона:</strong> ${r.key_strength}</p>`:''}
-          ${r.key_mistake?`<p>⚠️ <strong>Главная ошибка:</strong> ${r.key_mistake}</p>`:''}
-          <p>📝 ${r.summary}</p>
-          <div class="notify-row">
-            ${user.tgId?'<span class="badge-tg">📱 Отправлено в Telegram</span>':''}
-            <span class="badge-gs">📊 Сохранено в Sheets</span>
-          </div>
-        </div>
-      </div>
-    </div>`;
-}
 
-/* ═══════════════════════════════════════════════════
-   TRAINING
-═══════════════════════════════════════════════════ */
-function pickScenario(el,id){
-  document.querySelectorAll('.sc-card').forEach(c=>c.classList.remove('sel'));
-  el.classList.add('sel'); selScenario=id;
-  document.getElementById('startBtn').disabled=false;
-}
-function setDiff(el,d){
-  document.querySelectorAll('.diff-btn').forEach(b=>b.classList.remove('active'));
-  el.classList.add('active'); selDiff=d;
-}
-const scenName=()=>PRODUCT.scenarios.find(s=>s.id===selScenario)?.name||selScenario;
-const diffName=()=>({easy:'Лёгкий клиент',medium:'Сложный',hard:'Жёсткий клиент'}[selDiff]);
+  const spinHTML = r.spin_used ? `
+    <div class="slabel">SPIN-анализ вопросов</div>
+    <div class="spin-grid">
+      ${[['S — Ситуация',r.spin_used.situation],['P — Проблема',r.spin_used.problem],
+         ['I — Последствия',r.spin_used.implication],['N — Выгода',r.spin_used.need_payoff]]
+        .map(([lbl,used])=>`
+          <div class="spin-cell ${used?'used':'unused'}">
+            <div class="spin-lbl">${lbl}</div>
+            <div class="spin-icon">${used?'✓':'✗'}</div>
+          </div>`).join('')}
+    </div>` : '';
 
-// Системный промпт теперь строится на сервере в api/chat.js (GPT-4.1 mini)
+  const phraseHTML = (r.best_phrase||r.worst_phrase) ? `
+    <div class="phrase-grid">
+      ${r.best_phrase ? `
+        <div class="phrase-box best">
+          <div class="phrase-lbl">💬 Лучшая фраза</div>
+          <div class="phrase-text">«${r.best_phrase}»</div>
+        </div>` : ''}
+      ${r.worst_phrase ? `
+        <div class="phrase-box worst">
+          <div class="phrase-lbl">⚠️ Слабый момент</div>
+          <div class="phrase-text">${r.worst_phrase}</div>
+        </div>` : ''}
+    </div>` : '';
 
-async function startTraining(){
-  if(!selScenario)return;
-  chatHistory=[]; turns=0;
-  document.getElementById('trainSetup').style.display='none';
-  document.getElementById('debriefOut').innerHTML='';
-  document.getElementById('chatMsgs').innerHTML='';
-  document.getElementById('chatPanel').classList.add('active');
-  document.getElementById('chatMeta').textContent=`${scenName()} · ${diffName()} · ${PRODUCT.productName}`;
-  updateTurn();
-  showTyping();
-  await sleep(1000);
-  try {
-    const {text}=await apiPost('/api/chat',{
-      messages:[{role:'user',content:'Начни диалог — первая реплика клиента (1-2 предложения, естественно и коротко).'}],
-      scenarioId:selScenario, difficulty:selDiff,
-      productFacts:PRODUCT.productFacts, maxTokens:200
-    });
-    chatHistory=[
-      {role:'user',content:'Начни диалог.'},
-      {role:'assistant',content:text}
-    ];
-    hideTyping();
-    addMsg('client',text.replace(/\[РЕЗУЛЬТАТ:.*?\]/g,'').trim());
-    document.getElementById('chatInput').focus();
-  } catch(e){hideTyping();addMsg('client','Ошибка: '+e.message);}
-}
+  const talkHTML = r.talk_ratio ? `
+    <div class="talk-bar">
+      🎙️ <strong>Соотношение речи:</strong> ${r.talk_ratio}
+      <span class="talk-ideal">Идеал: менеджер 40%, клиент 60%</span>
+    </div>` : '';
 
-async function sendMsg(){
-  const inp=document.getElementById('chatInput');
-  const txt=inp.value.trim();
-  if(!txt)return;
-  inp.value=''; inp.style.height='auto';
-  addMsg('agent',txt);
-  chatHistory.push({role:'user',content:txt});
-  turns++; updateTurn();
-  showTyping();
-  try {
-    const {text}=await apiPost('/api/chat',{
-      messages:chatHistory, scenarioId:selScenario, difficulty:selDiff,
-      productFacts:PRODUCT.productFacts, maxTokens:300
-    });
-    chatHistory.push({role:'assistant',content:text});
-    hideTyping();
-    const isEnd=text.includes('[РЕЗУЛЬТАТ:');
-    addMsg('client',text.replace(/\[РЕЗУЛЬТАТ:.*?\]/g,'').trim());
-    if(isEnd||turns>=10){await sleep(600);runDebrief(text.includes('успех'));}
-  } catch(e){hideTyping();addMsg('client','Ошибка: '+e.message);}
-}
-
-function endCall(){hideTyping();runDebrief(false);}
-
-async function runDebrief(success){
-  document.getElementById('chatPanel').classList.remove('active');
-  const out=document.getElementById('debriefOut');
-  out.innerHTML='<div class="loading-row"><div class="spinner dark"></div> Анализирую переговоры...</div>';
-  const transcript=chatHistory
-    .filter(m=>!m.content.startsWith('Начни'))
-    .map(m=>`${m.role==='user'?'Менеджер':'Клиент'}: ${m.content.replace(/\[РЕЗУЛЬТАТ:.*?\]/g,'').trim()}`)
-    .join('\n');
-  try {
-    const r=await apiPost('/api/debrief',{
-      transcript, scenario:scenName(), difficulty:diffName(),
-      success, productFacts:PRODUCT.productFacts
-    });
-    renderDebrief(r,success,transcript);
-    // Telegram
-    const sc=r.total;
-    const bads=(r.moments||[]).filter(m=>m.type==='bad').map(m=>`• ${m.text}`).join('\n');
-    const goods=(r.moments||[]).filter(m=>m.type==='good').map(m=>`• ${m.text}`).join('\n');
-    await tgSend(`🎭 <b>Тренировка — ${user.name}</b>\n📋 ${scenName()} · ${diffName()}\n${sc>=7?'🟢':sc>=4?'🟡':'🔴'} Балл: ${sc}/10 · ${success?'✅ Закрыто':'❌ Не закрыто'}\n\n✅ Хорошо:\n${goods||'—'}\n\n❌ Ошибки:\n${bads||'—'}\n\n🎯 ${r.next_focus||''}`);
-    if(user.tgId)toast('📱','Разбор отправлен в Telegram');
-    await sheetsLog({type:'training',ts:new Date().toISOString(),name:user.name,role:user.role,
-      product:PRODUCT.productName,scenario:scenName(),difficulty:diffName(),success,total:r.total,
-      rapport:r.scores.rapport,needs:r.scores.needs_discovery,
-      argumentation:r.scores.argumentation,objections:r.scores.objections,closing:r.scores.closing,
-      verdict:r.verdict,nextFocus:r.next_focus,transcript:transcript.slice(0,4000)});
-    toast('📊','Сохранено в Google Sheets');
-  } catch(e){out.innerHTML=`<div class="err-box">⚠️ Ошибка: ${e.message}</div>`;}
-}
-
-function renderDebrief(r,success){
-  const out=document.getElementById('debriefOut');
-  const labels=['Контакт','Потребности','Аргументация','Возражения','Закрытие'];
-  const keys=Object.keys(r.scores);
-  const clr=v=>v>=7?'green':v>=4?'orange':'red';
-  const cells=keys.map((k,i)=>`<div class="sk-cell"><div class="sk-lbl">${labels[i]||k}</div><div class="sk-val ${clr(r.scores[k])}">${r.scores[k]}</div></div>`).join('');
-  const moments=(r.moments||[]).map(m=>`
+  const moments = (r.moments||[]).map(m=>`
     <div class="moment ${m.type}">
       <div class="moment-tag">${m.type==='good'?'✓ Хорошо':m.type==='bad'?'✗ Ошибка':'💡 Совет'}</div>
       <div class="moment-text">${m.text}</div>
-      ${m.alternative?`<div class="moment-alt">${m.alternative}</div>`:''}
+      ${m.alternative ? `<div class="moment-alt">${m.alternative}</div>` : ''}
     </div>`).join('');
-  out.innerHTML=`
+
+  out.innerHTML = `
     <div class="deb">
       <div class="deb-hdr">
         <div class="deb-title">📋 Разбор тренировки · ${scenName()}</div>
-        <div class="deb-meta">${success?'✅ Закрыто':'❌ Не закрыто'} · ${r.total}/10</div>
+        <div class="deb-meta">${success?'✅ Закрыто':'❌ Не закрыто'} · ${r.total||0}/10</div>
       </div>
       <div class="deb-body">
         <div class="slabel">Оценки по навыкам</div>
         <div class="skill-grid">
           ${cells}
           <div class="sk-cell" style="border-color:var(--gold);background:var(--gold-bg)">
-            <div class="sk-lbl">Итог</div><div class="sk-val gold">${r.total}</div>
+            <div class="sk-lbl">Итог</div>
+            <div class="sk-val gold">${r.total||0}</div>
           </div>
         </div>
-        <!-- SPIN breakdown -->
-        ${r.spin_used ? `
-        <div class="slabel">SPIN-анализ вопросов</div>
-        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px">
-          ${[
-            ['S — Ситуация', r.spin_used.situation],
-            ['P — Проблема', r.spin_used.problem],
-            ['I — Последствия', r.spin_used.implication],
-            ['N — Выгода', r.spin_used.need_payoff]
-          ].map(([label,used])=>`
-            <div style="background:${used?'var(--green-bg)':'var(--red-bg)'};border:1px solid ${used?'var(--green-bdr)':'var(--red-bdr)'};border-radius:var(--rsm);padding:12px 10px;text-align:center">
-              <div style="font-size:10px;letter-spacing:.8px;text-transform:uppercase;color:${used?'var(--green)':'var(--red)'};font-weight:700;margin-bottom:5px">${label}</div>
-              <div style="font-size:20px">${used?'✓':'✗'}</div>
-            </div>`).join('')}
-        </div>` : ''}
-
-        <!-- best / worst phrase -->
-        ${(r.best_phrase||r.worst_phrase) ? `
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px">
-          ${r.best_phrase?`<div style="background:var(--green-bg);border:1px solid var(--green-bdr);border-radius:var(--rsm);padding:14px">
-            <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--green);font-weight:700;margin-bottom:6px">💬 Лучшая фраза</div>
-            <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:var(--ink2);line-height:1.5">«${r.best_phrase}»</div>
-          </div>`:''}
-          ${r.worst_phrase?`<div style="background:var(--red-bg);border:1px solid var(--red-bdr);border-radius:var(--rsm);padding:14px">
-            <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--red);font-weight:700;margin-bottom:6px">⚠️ Слабый момент</div>
-            <div style="font-size:14px;color:var(--ink2);line-height:1.5">${r.worst_phrase}</div>
-          </div>`:''}
-        </div>` : ''}
-
-        ${r.talk_ratio?`<div style="font-size:13px;color:var(--ink3);background:var(--surface2);border:1px solid var(--border);border-radius:var(--rsm);padding:10px 14px;margin-bottom:20px">
-          🎙️ <strong>Соотношение речи:</strong> ${r.talk_ratio} &nbsp;·&nbsp; <span style="color:var(--green)">Идеал: менеджер говорит 40%, клиент — 60%</span>
-        </div>`:''}
-
+        ${spinHTML}
+        ${phraseHTML}
+        ${talkHTML}
         <div class="slabel">Разбор по моментам</div>
-        <div class="moments">${moments}</div>
+        <div class="moments">${moments||'<p style="color:var(--ink3);font-size:14px">Моменты не найдены</p>'}</div>
         <div class="verdict-box">
-          <p><strong>Вывод:</strong> ${r.verdict}</p>
-          ${r.next_focus?`<p style="color:var(--ink3)">🎯 <strong>Следующий фокус:</strong> ${r.next_focus}</p>`:''}
+          <p><strong>Вывод:</strong> ${r.verdict||'—'}</p>
+          ${r.next_focus ? `<p style="color:var(--ink3)">🎯 <strong>Следующий фокус:</strong> ${r.next_focus}</p>` : ''}
           <div class="notify-row">
-            ${user.tgId?'<span class="badge-tg">📱 Отправлено в Telegram</span>':''}
+            ${user.tgId ? '<span class="badge-tg">📱 Отправлено в Telegram</span>' : ''}
             <span class="badge-gs">📊 Сохранено в Sheets</span>
           </div>
         </div>
@@ -838,29 +993,71 @@ function renderDebrief(r,success){
     </div>`;
 }
 
-function retryScenario(){document.getElementById('debriefOut').innerHTML='';document.getElementById('trainSetup').style.display='';startTraining();}
-function newScenario(){document.getElementById('debriefOut').innerHTML='';document.getElementById('trainSetup').style.display='';document.querySelectorAll('.sc-card').forEach(c=>c.classList.remove('sel'));selScenario=null;document.getElementById('startBtn').disabled=true;document.getElementById('chatPanel').classList.remove('active');}
+function retryScenario() {
+  document.getElementById('debriefOut').innerHTML = '';
+  document.getElementById('trainSetup').style.display = '';
+  debriefRunning = false;
+  startTraining();
+}
 
-/* chat ui */
-function addMsg(role,text){
-  const el=document.createElement('div');
-  el.className=`chat-msg ${role}`;
-  el.innerHTML=`<div class="chat-av ${role}">${role==='client'?'👤':'🎙️'}</div><div class="chat-bubble">${text.replace(/\n/g,'<br>')}</div>`;
-  const msgs=document.getElementById('chatMsgs');
-  msgs.appendChild(el); msgs.scrollTop=msgs.scrollHeight;
+function newScenario() {
+  document.getElementById('debriefOut').innerHTML = '';
+  document.getElementById('trainSetup').style.display = '';
+  document.querySelectorAll('.sc-card').forEach(c=>c.classList.remove('sel'));
+  selScenario = null;
+  debriefRunning = false;
+  document.getElementById('startBtn').disabled = true;
+  document.getElementById('chatPanel').classList.remove('active');
 }
-function showTyping(){
-  if(document.getElementById('typingInd'))return;
-  const el=document.createElement('div');
-  el.className='typing-ind';el.id='typingInd';
-  el.innerHTML='<div class="chat-av client">👤</div><div class="typing-wrap"><div class="td"></div><div class="td"></div><div class="td"></div></div>';
-  const msgs=document.getElementById('chatMsgs');
-  msgs.appendChild(el);msgs.scrollTop=msgs.scrollHeight;
+
+/* ═══════════════════════════════════════════
+   CHAT UI
+═══════════════════════════════════════════ */
+function addMsg(role, text) {
+  const el = document.createElement('div');
+  el.className = `chat-msg ${role}`;
+  el.innerHTML = `
+    <div class="chat-av ${role}">${role==='client'?'👤':'🎙️'}</div>
+    <div class="chat-bubble">${text.replace(/\n/g,'<br>')}</div>`;
+  const msgs = document.getElementById('chatMsgs');
+  msgs.appendChild(el);
+  msgs.scrollTop = msgs.scrollHeight;
 }
-function hideTyping(){document.getElementById('typingInd')?.remove();}
-function updateTurn(){document.getElementById('turnChip').textContent=`Реплика ${turns}`;}
-function onChatKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();}}
-function growField(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,100)+'px';}
+
+function showTyping() {
+  if (document.getElementById('typingInd')) return;
+  const el = document.createElement('div');
+  el.className = 'typing-ind';
+  el.id = 'typingInd';
+  el.innerHTML = `
+    <div class="chat-av client">👤</div>
+    <div class="typing-wrap">
+      <div class="td"></div><div class="td"></div><div class="td"></div>
+    </div>`;
+  const msgs = document.getElementById('chatMsgs');
+  msgs.appendChild(el);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function hideTyping() {
+  document.getElementById('typingInd')?.remove();
+}
+
+function updateTurn() {
+  document.getElementById('turnChip').textContent = `Реплика ${turns}`;
+}
+
+function onChatKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMsg();
+  }
+}
+
+function growField(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 100) + 'px';
+}
 </script>
 </body>
 </html>
