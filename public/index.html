@@ -824,7 +824,8 @@ async function sendMsg() {
     hideTyping();
     const isEnd = text.includes('[РЕЗУЛЬТАТ:');
     addMsg('client', text.replace(/\[РЕЗУЛЬТАТ:.*?\]/g,'').trim());
-    if (isEnd || turns >= 10) {
+    const minTurns = {easy: 4, medium: 5, hard: 6}[selDiff] || 4;
+    if ((isEnd && turns >= minTurns) || turns >= 10) {
       debriefRunning = true;
       await sleep(700);
       runDebrief(text.includes('успех'));

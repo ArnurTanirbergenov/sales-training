@@ -24,9 +24,13 @@ const DIFF_MODS = {
   hard:   { label: 'Жёсткий', min: 6, max: 10, desc: 'Ты скептичен, давишь: "У других дешевле". Нужно 4-5 сильных аргументов с фактами.' }
 };
 
-function buildSystem(scenarioId, difficulty, productFacts) {
+function buildSystem(scenarioId, difficulty, productFacts, managerTurns = 0, diff = DIFF_MODS.medium) {
   const persona = CLIENT_PERSONAS[scenarioId] || CLIENT_PERSONAS.cold;
-  const diff = DIFF_MODS[difficulty] || DIFF_MODS.medium;
+
+  const canEnd = managerTurns >= diff.min;
+  const endRule = canEnd
+    ? `- Если все условия выполнены — можешь завершить диалог. Добавь в конец реплики: [РЕЗУЛЬТАТ: успех] или [РЕЗУЛЬТАТ: неудача]`
+    : `- НЕЛЬЗЯ добавлять [РЕЗУЛЬТАТ:] — менеджер сделал только ${managerTurns} реплик, минимум ${diff.min}. Продолжай диалог.`;
 
   return `Ты — реальный клиент Qazaq Grill в учебной ролевой игре для обучения продажам.
 
@@ -52,11 +56,12 @@ ${productFacts}
 - Обработал 2+ возражения с аргументами
 - Установил человеческий контакт
 
+СЧЁТЧИК: менеджер сделал ${managerTurns} реплик из минимум ${diff.min}.
+
 ПРАВИЛА:
 - Отвечай коротко, как в реальном звонке — максимум 3 предложения
 - Задавай конкретные вопросы: цена, халяль, доставка, шоу, отзывы
-- Не соглашайся раньше чем через ${diff.min}-${diff.max} реплик менеджера
-- В САМОЙ ПОСЛЕДНЕЙ реплике добавь в конце: [РЕЗУЛЬТАТ: успех] или [РЕЗУЛЬТАТ: неудача]
+${endRule}
 - Только русский язык. Ты реальный человек, не выходи из роли.`;
 }
 
@@ -66,7 +71,6 @@ export default async function handler(req, res) {
 
   const { messages, scenarioId, difficulty, productFacts } = req.body;
 
-  // Validate required fields
   if (!messages || !Array.isArray(messages)) {
     return res.status(400).json({ error: 'messages array is required' });
   }
@@ -75,7 +79,9 @@ export default async function handler(req, res) {
   }
 
   try {
-    const system = buildSystem(scenarioId, difficulty || 'medium', productFacts || '');
+    const diff = DIFF_MODS[difficulty] || DIFF_MODS.medium;
+    const managerTurns = Math.max(0, messages.filter(m => m.role === 'user').length - 1);
+    const system = buildSystem(scenarioId, difficulty || 'medium', productFacts || '', managerTurns, diff);
     const text = await openai({ system, messages, maxTokens: 400, temperature: 0.9 });
     return res.status(200).json({ text });
   } catch (err) {
